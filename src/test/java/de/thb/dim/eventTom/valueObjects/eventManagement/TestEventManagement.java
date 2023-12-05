@@ -8,9 +8,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Written by Osama Ahmad , MN: 20233244
- */
+
 class TestEventManagement {
     private PartyVO party;
     private ShowVO show;
@@ -47,21 +45,21 @@ class TestEventManagement {
 
 
     @Test
-    public void partyWithValidAttributes() {
+    public void testPartyWithValidAttributes() {
         assertNotNull(party);
         assertEquals("Party 1", party.getName());
     }
 
 
     @Test
-    public void partyWithoutId() {
+    public void testPartyWithoutId() {
         assertThrows(IllegalArgumentException.class, () -> {
             new PartyVO(0, "Party 1", new String[]{"Sound System", "Lights"}, "Club XYZ", LocalDateTime.now(), "Buffet", "DJ John");
         });
     }
 
     @Test
-    public void partyWithNegativId() {
+    public void testPartyWithNegativId() {
         assertThrows(IllegalArgumentException.class, () -> {
             new PartyVO(-2, "Party 1", new String[]{"Sound System", "Lights"}, "Club XYZ", LocalDateTime.now(), "Buffet", "DJ John");
         });
@@ -69,33 +67,33 @@ class TestEventManagement {
 
 
     @Test
-    public void partyWithNullName() {
+    public void testPartyWithNullName() {
         assertThrows(NullPointerException.class, () -> {
             new PartyVO(1, null, new String[]{"Sound System", "Lights"}, "Club XYZ", LocalDateTime.now(), "Buffet", "DJ John");
         });
     }
 
     @Test
-    public void partyWithEmptyEquipment() {
+    public void testPartyWithEmptyEquipment() {
         PartyVO emptyEquipmentParty = new PartyVO(2, "Party 2", new String[]{}, "Club ABC", LocalDateTime.now(), "Snacks", "DJ Jane");
         assertEquals("", emptyEquipmentParty.equipmentToString());
     }
 
     @Test
-    public void showWithValidAttributes() {
+    public void testShowWithValidAttributes() {
         assertNotNull(show);
         assertEquals("Show 1", show.getName());
     }
 
     @Test
-    public void showWithNegativeRuntime() {
+    public void testShowWithNegativeRuntime() {
         assertThrows(IllegalArgumentException.class, () -> {
             new ShowVO(3, "Show 2", new String[]{"Projector"}, "Theater XYZ", LocalDateTime.now(), Duration.ofHours(-2), 1);
         });
     }
 
     @Test
-    public void showOnBoundaryDate() {
+    public void testShowOnBoundaryDate() {
         LocalDateTime boundaryDate = LocalDateTime.MAX;
         ShowVO boundaryShow = new ShowVO(4, "Boundary Show", new String[]{"Stage"}, "Boundary Theater", boundaryDate, Duration.ofHours(1), 1);
         assertEquals(boundaryDate, boundaryShow.getDate());
@@ -103,21 +101,21 @@ class TestEventManagement {
 
 
     @Test
-    public void partyWithEmptyName() {
+    public void testPartyWithEmptyName() {
         PartyVO emptyNameParty = new PartyVO(1, "", new String[]{"Sound System"}, "Club XYZ", LocalDateTime.now(), "Buffet", "DJ John");
         assertEquals("", emptyNameParty.getName());
     }
 
 
     @Test
-    public void partyWithFutureDate() {
+    public void testPartyWithFutureDate() {
         LocalDateTime futureDate = LocalDateTime.now().plusYears(1);
         PartyVO futureParty = new PartyVO(1, "Future Party", new String[]{"Sound System"}, "Club XYZ", futureDate, "Buffet", "DJ John");
         assertEquals(futureDate, futureParty.getDate());
     }
 
     @Test
-    public void partyWithPastDate() {
+    public void testPartyWithPastDate() {
         LocalDateTime pastDate = LocalDateTime.now().minusYears(1);
         PartyVO pastParty = new PartyVO(1, "Past Party", new String[]{"Sound System"}, "Club XYZ", pastDate, "Buffet", "DJ John");
         assertEquals(pastDate, pastParty.getDate());
@@ -125,21 +123,21 @@ class TestEventManagement {
 
 
     @Test
-    public void showWithNoEquipment() {
+    public void testShowWithNoEquipment() {
         ShowVO noEquipmentShow = new ShowVO(2, "Show No Equipment", new String[]{}, "Theater ABC", LocalDateTime.now(), Duration.ofHours(2), 1);
         assertEquals("", noEquipmentShow.equipmentToString());
     }
 
 
     @Test
-    public void showWithMaxRuntime() {
+    public void testShowWithMaxRuntime() {
         Duration maxRuntime = Duration.ofHours(24); // Angenommen, dies ist die maximale Dauer
         ShowVO maxRuntimeShow = new ShowVO(3, "Max Runtime Show", new String[]{"Projector"}, "Theater XYZ", LocalDateTime.now(), maxRuntime, 1);
         assertEquals(maxRuntime, maxRuntimeShow.getRuntime());
     }
 
     @Test
-    public void setNrAvailableTicketsWithValidValue() {
+    public void testSetNrAvailableTicketsWithValidValue() {
         ShowVO show = new ShowVO(1, "Test Show", new String[]{"Sound System"}, "Test Location", LocalDateTime.now(), Duration.ofHours(2), 1);
         show.setNrAvailableTickets(100);
         assertEquals(100, show.getNrAvailableTickets());
@@ -147,27 +145,17 @@ class TestEventManagement {
 
 
     @Test
-    public void setNrAvailableTicketsToZero() {
+    public void testSetNrAvailableTicketsToZero() {
         ShowVO show = new ShowVO(1, "Test Show", new String[]{"Sound System"}, "Test Location", LocalDateTime.now(), Duration.ofHours(2), 1);
         show.setNrAvailableTickets(0);
         assertEquals(0, show.getNrAvailableTickets());
     }
 
     @Test
-    public void setNrAvailableTicketsToNegative() {
+    public void testSetNrAvailableTicketsToNegative() {
         ShowVO show = new ShowVO(1, "Test Show", new String[]{"Sound System"}, "Test Location", LocalDateTime.now(), Duration.ofHours(2), 1);
         show.setNrAvailableTickets(-1);
         assertEquals(-1, show.getNrAvailableTickets()); // Annahme: Negativer Wert ist zugelassen
     }
-
-
-
-/*    @Test
-    public void showWithInvalidSeat() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new ShowVO(4, "Invalid Seat Show", new String[]{"Stage"}, "Boundary Theater", LocalDateTime.now(), Duration.ofHours(1), -1);
-        });
-    }*/
-
 
 }

@@ -16,42 +16,42 @@ class TestCustomerManagement {
 
     @BeforeEach
     void setup() throws Exception {
-        customer = new CustomerVO("Ahmad", "Osama", "Brunnenstr", 55, Gender.M, LocalDate.of(1990, 1, 2));
+        customer = new CustomerVO("Schneider", "Tom", "Brunnenstr", 55, Gender.M, LocalDate.of(1990, 1, 2));
     }
 
     @Test
-    void createValidCustomer() {
-        assertEquals("Osama", customer.getFirstName());
-        assertEquals("Ahmad", customer.getLastName());
+    void testCreateValidCustomer() {
+        assertEquals("Tom", customer.getFirstName());
+        assertEquals("Schneider", customer.getLastName());
         assertEquals(Gender.M, customer.getGender());
         assertEquals(55, customer.getHouseNr());
     }
 
     @Test
-    void createCustomerWithNullName() {
+    void testCreateCustomerWithNullName() {
         assertThrows(NullPointerException.class, () -> {
-            new CustomerVO(null, "Osama", "Brunnenstr", 55, Gender.M, LocalDate.of(1990, 1, 2));
+            new CustomerVO(null, "Jahn", "Brunnenstr", 55, Gender.M, LocalDate.of(1990, 1, 2));
         });
     }
 
     @Test
-    void createTooYoungCustomer() {
+    void testCreateTooYoungCustomer() {
         assertThrows(CustomerTooYoungException.class, () -> {
-            new CustomerVO("Ahmad", "Osama", "Brunnenstr", 55, Gender.M, LocalDate.now());
+            new CustomerVO("Giese", "Jahn", "Brunnenstr", 55, Gender.M, LocalDate.now());
         });
     }
 
 
 
     @Test
-    void calculateAgeCorrectly() throws CustomerNoDateOfBirthException, CustomerTooYoungException {
+    void testCalculateAgeCorrectly() throws CustomerNoDateOfBirthException, CustomerTooYoungException {
         LocalDate dob = LocalDate.of(1990, 1, 2);
         customer.setDateOfBirth(dob);
-        assertEquals(33, customer.calculateAge()); // Alter zum Testzeitpunkt
+        assertEquals(33, customer.calculateAge());
     }
 
     @Test
-    void setInvalidDateOfBirth() {
+    void testSetInvalidDateOfBirth() {
         assertThrows(CustomerTooYoungException.class, () -> {
             customer.setDateOfBirth(LocalDate.now().minusYears(10));
         });
@@ -59,7 +59,7 @@ class TestCustomerManagement {
 
 
     @Test
-    void createCustomerWhoIsTooYoung() {
+    void testCreateCustomerWhoIsTooYoung() {
         LocalDate tooYoungDOB = LocalDate.now().minusYears(16);
         assertThrows(CustomerTooYoungException.class, () -> {
             new CustomerVO("Doe", "Jane", "Main Street", 123, Gender.F, tooYoungDOB);
@@ -74,7 +74,7 @@ class TestCustomerManagement {
     }
 
     @Test
-    void createCustomerWithFutureDateOfBirth() {
+    void testCreateCustomerWithFutureDateOfBirth() {
         LocalDate futureDOB = LocalDate.now().plusYears(10);
         assertThrows(CustomerTooYoungException.class, () -> {
             new CustomerVO("Oldenberg", "Jahn", "Main Street", 57, Gender.M, futureDOB);
@@ -82,7 +82,7 @@ class TestCustomerManagement {
     }
 
     @Test
-    void ageShouldBeCorrectlyCalculated() throws CustomerNoDateOfBirthException, CustomerTooYoungException {
+    void testAgeShouldBeCorrectlyCalculated() throws CustomerNoDateOfBirthException, CustomerTooYoungException {
         LocalDate dob = LocalDate.of(2000, 1, 1);
         customer.setDateOfBirth(dob);
         int expectedAge = Period.between(dob, LocalDate.now()).getYears();
@@ -92,5 +92,4 @@ class TestCustomerManagement {
 
 
 
-    // Weitere Tests für andere Methoden und Randfälle
 }
