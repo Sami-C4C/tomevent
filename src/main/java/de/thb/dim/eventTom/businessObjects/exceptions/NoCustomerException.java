@@ -2,9 +2,7 @@ package de.thb.dim.eventTom.businessObjects.exceptions;
 
 public class NoCustomerException extends Exception {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
 	public NoCustomerException () { 
@@ -14,7 +12,5 @@ public class NoCustomerException extends Exception {
 	public NoCustomerException(String message) {
 		super(message);
 	}
-	
-	
 
 }
