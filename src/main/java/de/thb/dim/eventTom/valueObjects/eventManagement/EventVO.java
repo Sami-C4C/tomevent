@@ -7,7 +7,14 @@ import java.util.Arrays;
 
 import de.thb.dim.eventTom.valueObjects.ticketSale.TicketVO;
 
-public abstract class EventVO implements Serializable {
+
+/**
+ * Cloneable is implemented.
+ * The error java.lang.InternalError occurs because clone
+ * throws a CloneNotSupportedException. This typically happens
+ * when the class does not implement the Cloneable interface.
+ */
+public abstract class EventVO implements Serializable, Cloneable {
 
     /**
      *
@@ -186,7 +193,7 @@ public abstract class EventVO implements Serializable {
      */
     public void setId(int id) {
         if (id <= 0){
-            throw new IllegalArgumentException("Invalid id");
+            throw new IllegalArgumentException("Invalid id" + id);
         }
         this.id = id;
     }

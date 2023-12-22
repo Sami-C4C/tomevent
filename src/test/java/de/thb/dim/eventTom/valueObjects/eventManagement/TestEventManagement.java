@@ -1,5 +1,6 @@
 package de.thb.dim.eventTom.valueObjects.eventManagement;
 
+import de.thb.dim.eventTom.valueObjects.ticketSale.TicketVO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -7,15 +8,18 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-
+/**
+ * @author Osama Ahmad , MN:20233244
+ */
 class TestEventManagement {
     private PartyVO party;
     private ShowVO show;
 
     @BeforeEach
     public void setup() {
-        // Erstellen realer Objekte
         String[] equipment = {"Sound System", "Lights"};
         LocalDateTime partyDate = LocalDateTime.now().plusDays(7);
         LocalDateTime showDate = LocalDateTime.now().plusDays(14);
@@ -48,6 +52,12 @@ class TestEventManagement {
     public void testPartyWithValidAttributes() {
         assertNotNull(party);
         assertEquals("Party 1", party.getName());
+        assertEquals(1, party.getId());
+        assertEquals("Club XYZ", party.getLocation());
+        assertEquals(LocalDateTime.now().plusDays(7).toLocalDate(), party.getDate().toLocalDate());
+        assertEquals("Buffet", party.getCatering());
+        assertEquals("DJ John", party.getPerformer());
+
     }
 
 
@@ -157,5 +167,133 @@ class TestEventManagement {
         show.setNrAvailableTickets(-1);
         assertEquals(-1, show.getNrAvailableTickets()); // Annahme: Negativer Wert ist zugelassen
     }
+
+    @Test
+    void testEqualsMethod() {
+        LocalDateTime date = LocalDateTime.now();
+        EventVO event1 = new PartyVO(1, "Event1", new String[]{"Equipment1"}, "Location1", date, "Catering1", "Performer1");
+        EventVO event2 = new PartyVO(1, "Event1", new String[]{"Equipment1"}, "Location1", date, "Catering1", "Performer1");
+
+        assertEquals(event1, event2);
+    }
+
+    @Test
+    void testEqualsWithDifferentIds() {
+        EventVO event1 = new PartyVO(1, "Event", new String[]{"Equipment"}, "Location", LocalDateTime.now(), "Catering", "Performer");
+        EventVO event2 = new PartyVO(2, "Event", new String[]{"Equipment"}, "Location", LocalDateTime.now(), "Catering", "Performer");
+
+        assertNotEquals(event1, event2);
+    }
+
+
+    @Test
+    void testEqualsWithDifferentNames() {
+        EventVO event1 = new PartyVO(1, "Event1", new String[]{"Equipment"}, "Location", LocalDateTime.now(), "Catering", "Performer");
+        EventVO event2 = new PartyVO(1, "Event2", new String[]{"Equipment"}, "Location", LocalDateTime.now(), "Catering", "Performer");
+
+        assertNotEquals(event1, event2);
+    }
+
+    @Test
+    void testEqualsWithDifferentDates() {
+        LocalDateTime date1 = LocalDateTime.now();
+        LocalDateTime date2 = LocalDateTime.now().plusDays(1);
+
+        EventVO event1 = new PartyVO(1, "Event", new String[]{"Equipment"}, "Location", date1, "Catering", "Performer");
+        EventVO event2 = new PartyVO(1, "Event", new String[]{"Equipment"}, "Location", date2, "Catering", "Performer");
+
+        assertNotEquals(event1, event2);
+    }
+
+    @Test
+    void testEqualsWithDifferentObjectTypes() {
+        EventVO event = new PartyVO(1, "Event", new String[]{"Equipment"}, "Location", LocalDateTime.now(), "Catering", "Performer");
+        String notAnEvent = "Not an Event";
+
+        assertNotEquals(event, notAnEvent);
+    }
+
+    @Test
+    void testEqualsWithItself() {
+        EventVO event = new PartyVO(1, "Event", new String[]{"Equipment"}, "Location", LocalDateTime.now(), "Catering", "Performer");
+
+        assertEquals(event, event);
+    }
+
+
+    @Test
+    void testCalculateNrAvailableTickets() {
+        EventVO event = new PartyVO(1, "Event", new String[]{"Equipment"}, "Location", LocalDateTime.now(), "Catering", "Performer");
+        TicketVO ticket1 = mock(TicketVO.class);
+        TicketVO ticket2 = mock(TicketVO.class);
+
+        when(ticket1.getNumber()).thenReturn(10);
+        when(ticket2.getNumber()).thenReturn(20);
+
+        event.addTicketCategory(ticket1);
+        event.addTicketCategory(ticket2);
+
+        event.calculateNrAvailableTickets();
+
+        assertEquals(30, event.getNrAvailableTickets());
+    }
+
+    @Test
+    void testAddAndDeleteTicketCategory() {
+        EventVO event = new PartyVO(1, "Event", new String[]{"Equipment"}, "Location", LocalDateTime.now(), "Catering", "Performer");
+        TicketVO ticket = mock(TicketVO.class);
+
+        event.addTicketCategory(ticket);
+        assertTrue(event.getTicketCategory(0) == ticket);
+
+        event.deleteTicketCategory(ticket);
+        assertTrue(event.ticketCategory.isEmpty()); // Überprüfen, ob die Liste leer ist
+    }
+
+
+    @Test
+    void testGetTicketCategory() {
+        EventVO event = new PartyVO(1, "Event", new String[]{"Equipment"}, "Location", LocalDateTime.now(), "Catering", "Performer");
+        TicketVO ticket = mock(TicketVO.class);
+
+        event.addTicketCategory(ticket);
+        assertEquals(ticket, event.getTicketCategory(0));
+    }
+
+
+    @Test
+    void testGetPrices() {
+        EventVO event = new PartyVO(1, "Event", new String[]{"Equipment"}, "Location", LocalDateTime.now(), "Catering", "Performer");
+        event.setSeatTicketPrice(50.0f);
+        event.setSeasonTicketPrice(150.0f);
+        event.setBackstageTicketPrice(200.0f);
+
+        assertEquals(50.0f, event.getSeatTicketPrice());
+        assertEquals(150.0f, event.getSeasonTicketPrice());
+        assertEquals(200.0f, event.getBackstageTicketPrice());
+    }
+
+    @Test
+    void testHashCode() {
+        LocalDateTime date = LocalDateTime.now();
+        EventVO event1 = new PartyVO(1, "Event", new String[]{"Equipment"}, "Location", date, "Catering", "Performer");
+        EventVO event2 = new PartyVO(1, "Event", new String[]{"Equipment"}, "Location", date, "Catering", "Performer");
+
+        assertEquals(event1.hashCode(), event2.hashCode());
+    }
+
+    /**
+     * Cloneable Interface is implemented by EventVO to solve this Problem
+     * @throws CloneNotSupportedException
+     */
+    @Test
+    void testClone() throws CloneNotSupportedException{
+        EventVO original = new PartyVO(1, "Event", new String[]{"Equipment"}, "Location", LocalDateTime.now(), "Catering", "Performer");
+        EventVO cloned = (EventVO) original.clone();
+
+        assertEquals(original, cloned);
+        assertNotSame(original, cloned);
+    }
+
 
 }

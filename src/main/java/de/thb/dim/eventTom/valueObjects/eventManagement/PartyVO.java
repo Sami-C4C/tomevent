@@ -67,10 +67,18 @@ public class PartyVO extends EventVO {
         return performer;
     }
 
+    /**
+     *
+     * @param catering
+     */
     public void setCatering(String catering) {
         this.catering = catering;
     }
 
+    /**
+     *
+     * @param perfomer
+     */
     public void setPerformer(String perfomer) {
         this.performer = perfomer;
     }

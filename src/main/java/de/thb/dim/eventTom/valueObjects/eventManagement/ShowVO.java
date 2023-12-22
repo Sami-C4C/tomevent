@@ -60,7 +60,7 @@ public class ShowVO extends EventVO {
 	 * @param runtime
 	 */
     public void setRuntime(Duration runtime) {
-        if (runtime.isNegative()) {
+        if (runtime != null && runtime.isNegative()) {
             throw new IllegalArgumentException("Runtime must not be negative");
         }
         this.runtime = runtime;
