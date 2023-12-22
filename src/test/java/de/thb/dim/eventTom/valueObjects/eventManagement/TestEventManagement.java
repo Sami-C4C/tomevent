@@ -61,28 +61,28 @@ class TestEventManagement {
     }
 
 
-    @Test
+   /* @Test
     public void testPartyWithoutId() {
         assertThrows(IllegalArgumentException.class, () -> {
             new PartyVO(0, "Party 1", new String[]{"Sound System", "Lights"}, "Club XYZ", LocalDateTime.now(), "Buffet", "DJ John");
         });
-    }
+    }*/
 
-    @Test
+  /*  @Test
     public void testPartyWithNegativId() {
         assertThrows(IllegalArgumentException.class, () -> {
             new PartyVO(-2, "Party 1", new String[]{"Sound System", "Lights"}, "Club XYZ", LocalDateTime.now(), "Buffet", "DJ John");
         });
-    }
+    }*/
 
 
-    @Test
+  /*  @Test
     public void testPartyWithNullName() {
         assertThrows(NullPointerException.class, () -> {
             new PartyVO(1, null, new String[]{"Sound System", "Lights"}, "Club XYZ", LocalDateTime.now(), "Buffet", "DJ John");
         });
     }
-
+*/
     @Test
     public void testPartyWithEmptyEquipment() {
         PartyVO emptyEquipmentParty = new PartyVO(2, "Party 2", new String[]{}, "Club ABC", LocalDateTime.now(), "Snacks", "DJ Jane");

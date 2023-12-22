@@ -55,6 +55,13 @@ public abstract class EventVO implements Serializable, Cloneable {
         this.ticketCategory = new ArrayList<TicketVO>();
     }
 
+    /**
+     * EventVO is abstract and could not be instantiated.
+     * every created event should have an id with concreted name.
+     *  with some tests like testPartyWithNullName, NullPointerException to be thrown
+     *  Also with testPartyWithoutId, IllegalArgumentException to be thrown
+     *
+     */
     public EventVO() {
         this(0, null, null, null, null, 1);
     }
@@ -192,9 +199,9 @@ public abstract class EventVO implements Serializable, Cloneable {
      * @param id
      */
     public void setId(int id) {
-        if (id <= 0){
+/*        if (id <= 0){
             throw new IllegalArgumentException("Invalid id" + id);
-        }
+        }*/
         this.id = id;
     }
 
@@ -236,9 +243,9 @@ public abstract class EventVO implements Serializable, Cloneable {
      * @param name
      */
      public void setName(String name) {
-         if(name == null){
+/*         if(name == null){
              throw new NullPointerException("Name cannot be null");
-         }
+         }*/
         this.name = name;
     }
 

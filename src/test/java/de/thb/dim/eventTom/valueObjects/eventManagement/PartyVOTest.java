@@ -1,5 +1,6 @@
 package de.thb.dim.eventTom.valueObjects.eventManagement;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,49 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Osama Ahmad , MN:20233244
  */
 class PartyVOTest {
+
+    private EventVO party1, party2, partyWithNullCatering, partyWithNullPerformer;
+    private LocalDateTime date;
+
+    @BeforeEach
+    void setUp() {
+        date = LocalDateTime.of(2023, 10, 5, 20, 0);
+
+        party1 = new PartyVO(1, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, "Buffet", "DJ John");
+        party2 = new PartyVO(4, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, "Buffet", "DJ John");
+        partyWithNullCatering = new PartyVO(1, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, null, "DJ John");
+        partyWithNullPerformer = new PartyVO(1, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, "Buffet", null);
+    }
+
+
+    @Test
+    void testEquals() {
+        assertTrue(party1.equals(party1), "A party must equal itself.");
+        assertFalse(party1.equals(null), "A party should not equal null.");
+
+        Object otherObject = new Object();
+        assertFalse(party1.equals(otherObject), "A party should not equal an object of a different class.");
+
+        PartyVO differentCatering = new PartyVO(1, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, "Full Bar", "DJ John");
+        assertFalse(party1.equals(differentCatering), "Parties with different catering should not be equal.");
+
+
+        EventVO party2Clone = new PartyVO(4, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, "Buffet", "DJ John");
+
+        assertTrue(party2.equals(party2Clone), "Two parties with the same catering should be equal.");
+
+        PartyVO anotherPartyWithNullCatering = new PartyVO(1, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, null, "DJ John");
+        assertTrue(partyWithNullCatering.equals(anotherPartyWithNullCatering), "Two parties with null catering should be equal.");
+
+        PartyVO differentPerformer = new PartyVO(1, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, "Buffet", "DJ Jane");
+        assertFalse(party1.equals(differentPerformer), "Parties with different performers should not be equal.");
+
+
+        PartyVO anotherPartyWithNullPerformer = new PartyVO(1, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, "Buffet", null);
+        assertTrue(partyWithNullPerformer.equals(anotherPartyWithNullPerformer), "Two parties with null performers should be equal.");
+    }
+
+
     @Test
     void testPartyVOInitialization() {
         PartyVO party = new PartyVO(2, "PartyEvent", new String[]{"DJ-Set", "Lichter"}, "Club", LocalDateTime.now(), "Catering-Service", "DJ Max");
@@ -61,7 +105,7 @@ class PartyVOTest {
 
         party3.setPerformer("DJ");
 
-        assertEquals(party3,party4);
+        assertEquals(party3, party4);
 
     }
 
@@ -90,9 +134,9 @@ class PartyVOTest {
         EventVO event1 = new PartyVO(2, "PartyEvent", new String[]{"DJ-Set", "Lichter"}, "Club", fixedDate, "Catering-Service", "DJ Max");
         PartyVO event2 = new PartyVO(2, "PartyEvent", new String[]{"DJ-Set", "Lichter"}, "Club", fixedDate, "Catering-Service", "DJ Max");
 
-        assertEquals(event1,event2);
+        assertEquals(event1, event2);
         event2.setCatering(null);
-        assertNotEquals(event1,event2);
+        assertNotEquals(event1, event2);
     }
 
 
@@ -105,9 +149,9 @@ class PartyVOTest {
 
         assertNotEquals(party1, party2);
 
-       party1.setCatering("Catering5");
+        party1.setCatering("Catering5");
 
-       assertTrue(party1.equals(party2));
+        assertTrue(party1.equals(party2));
     }
 
 

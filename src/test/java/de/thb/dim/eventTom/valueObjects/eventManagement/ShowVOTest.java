@@ -1,5 +1,6 @@
 package de.thb.dim.eventTom.valueObjects.eventManagement;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -11,6 +12,58 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Osama Ahmad , MN:20233244
  */
 class ShowVOTest {
+
+    private EventVO show1, show2, showWithNullRuntime;
+    private LocalDateTime date;
+    private Duration runtime;
+
+    @BeforeEach
+    void setUp() {
+        date = LocalDateTime.of(2023, 10, 5, 20, 0);
+        runtime = Duration.ofHours(2);
+
+        show1 = new ShowVO(1, "Show A", new String[]{"Sound", "Lights"}, "Theatre", date, runtime, 100);
+        show2 = new ShowVO(1, "Show B", new String[]{"Sound", "Lights"}, "Theatre", date, runtime, 100);
+        showWithNullRuntime = new ShowVO(1, "Show A", new String[]{"Sound", "Lights"}, "Theatre", date, null, 100);
+    }
+
+
+
+    @Test
+    public void testEquals(){
+        assertTrue(show1.equals(show1), "A show must equal itself.");
+        assertFalse(show1.equals(null), "A show should not equal null.");
+        Object otherObject = new Object();
+        assertFalse(show1.equals(otherObject), "A show should not equal an object of a different class.");
+        ShowVO showDifferentRuntime = new ShowVO(1, "Show A", new String[]{"Sound", "Lights"}, "Theatre", date, Duration.ofHours(3), 100);
+        assertFalse(show1.equals(showDifferentRuntime), "Shows with different runtimes should not be equal.");
+
+        ShowVO show1Clone = new ShowVO(1, "Show A", new String[]{"Sound", "Lights"}, "Theatre", date, runtime, 100);
+
+        assertTrue(show1.equals(show1Clone), "Two shows with the same runtime should be equal.");
+
+        ShowVO anotherShowWithNullRuntime = new ShowVO(1, "Show A", new String[]{"Sound", "Lights"}, "Theatre", date, null, 100);
+        assertTrue(showWithNullRuntime.equals(anotherShowWithNullRuntime), "Two shows with null runtimes should be equal.");
+
+        assertFalse(show1.equals(showWithNullRuntime) && showDifferentRuntime.equals(show1), "A show with a runtime should not equal a show with a null runtime.");
+    }
+
+
+    @Test
+    void testEqualsDifferentClasses() {
+        class SubShowVO extends ShowVO {
+            SubShowVO(int id, String name, String[] equipment, String location, LocalDateTime date, Duration runtime, int anzCategory) {
+                super(id, name, equipment, location, date, runtime, anzCategory);
+            }
+        }
+
+        ShowVO subShow = new SubShowVO(1, "Show A", new String[]{"Sound", "Lights"}, "Theatre", date, runtime, 100);
+        assertFalse(show1.equals(subShow), "ShowVO should not be equal to a subclass instance.");
+    }
+
+
+
+
     @Test
     void testShowVOInitialization() {
         ShowVO show = new ShowVO(3, "Theaterstück", new String[]{"Bühnendekoration", "Soundanlage"}, "Theater", LocalDateTime.now(), Duration.ofHours(2), 2);
