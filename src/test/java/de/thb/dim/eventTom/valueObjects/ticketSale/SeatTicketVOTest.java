@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author Osama Ahmad , MN:20233244
+ */
 class SeatTicketVOTest {
 
     private SeatTicketVO ticket1;
