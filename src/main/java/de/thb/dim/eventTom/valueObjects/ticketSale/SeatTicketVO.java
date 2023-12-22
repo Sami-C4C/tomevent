@@ -13,6 +13,8 @@ public class SeatTicketVO extends TicketVO {
 	public SeatTicketVO(int number, float price, String seat, EventVO event) {
 		super(number, event.getName() + " Seat " + nextId++, price,  event);
 	}
+
+
 	
 
 	@Override

@@ -76,7 +76,17 @@ public class SeasonTicketVO extends TicketVO {
 		this.endOfSeason = endOfSeason;
 	}
 
-	@Override
+	/**
+	 * @author Osama Ahmad
+	 * Error: this function has a logical issue
+	 * because they use the actual current date with LocalDate.now(), which
+	 * cannot be controlled during testing. As a result, it's unclear whether
+	 * the conditions for early, mid, and late season charges will be
+	 * met when the tests are run. You cannot guarantee that LocalDate.now() will
+	 * fall into the necessary range for the test's logic to execute as intended.
+	 * @return
+	 */
+	/*@Override
 	public float getCharge() {
 		LocalDate today = LocalDate.now();
 		int daysOfSeason = Period.between(getStartOfSeason(), getEndOfSeason()).getDays();
@@ -87,7 +97,9 @@ public class SeasonTicketVO extends TicketVO {
 			return 0.95f;
 		}
 		else return 0.9f;
-	}
+	}*/
+
+
 
 	@Override
 	public String getSeatOfTicket() {
@@ -96,4 +108,27 @@ public class SeasonTicketVO extends TicketVO {
 		return sb.toString();
 	}
 
+
+
+
+
+	// Overloaded getCharge method to accept a current date for testing [ // Overloaded getCharge method to accept a current date for testing]
+	public float getCharge(LocalDate currentDate) {
+		int daysOfSeason = Period.between(getStartOfSeason(), getEndOfSeason()).getDays();
+		int daysLeft = Period.between(currentDate, getEndOfSeason()).getDays();
+
+		if ((daysOfSeason / daysLeft) <= 0.5f) {
+			return 1;
+		} else if ((daysOfSeason / daysLeft) <= 0.8f) {
+			return 0.95f;
+		} else {
+			return 0.9f;
+		}
+	}
+
+	// Original getCharge method now calls the overloaded version with the current date
+	@Override
+	public float getCharge() {
+		return getCharge(LocalDate.now());
+	}
 }
