@@ -7,6 +7,7 @@ import de.thb.dim.eventTom.valueObjects.customerManagement.exceptions.CustomerTo
 import de.thb.dim.eventTom.valueObjects.eventManagement.EventVO;
 import de.thb.dim.eventTom.valueObjects.eventManagement.PartyVO;
 import de.thb.dim.eventTom.valueObjects.eventManagement.ShowVO;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -347,6 +348,22 @@ class BackstageTicketVOTest {
 
 
 
+    @AfterEach
+    public void teardown() {
+        // Reset all the objects to null to ensure no state is carried over between tests
+        ticket1 = null;
+        ticket2 = null;
+        ticket3 = null;
+        customer1 = null;
+        customer2 = null;
+        customer3 = null;
+        party = null;
+        show = null;
+
+        // If there are any static variables in your TicketVO or related classes, reset them as well
+        // For example, if you have a static nextId in the TicketVO class:
+        // TicketVO.resetNextId(); // Assuming you create a reset method in TicketVO
+    }
 
 
 }

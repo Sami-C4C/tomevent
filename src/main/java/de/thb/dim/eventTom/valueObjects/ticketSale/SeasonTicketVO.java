@@ -131,4 +131,5 @@ public class SeasonTicketVO extends TicketVO {
 	public float getCharge() {
 		return getCharge(LocalDate.now());
 	}
+
 }

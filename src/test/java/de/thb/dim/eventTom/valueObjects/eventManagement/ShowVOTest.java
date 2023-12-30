@@ -1,5 +1,6 @@
 package de.thb.dim.eventTom.valueObjects.eventManagement;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -227,5 +228,13 @@ class ShowVOTest {
         assertFalse(event1.equals(show2));
     }
 
+
+    @AfterEach
+    public void teardown() {
+        // Reset all the objects to null to ensure no state is carried over between tests
+       show1 = null;
+       show2 = null;
+
+    }
 
 }

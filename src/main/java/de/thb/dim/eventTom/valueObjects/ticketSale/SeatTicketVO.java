@@ -4,10 +4,14 @@ import de.thb.dim.eventTom.valueObjects.eventManagement.EventVO;
 
 public class SeatTicketVO extends TicketVO {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
+
+	/* Error found by Osama Ahmad
+	 * is static and not reset between tests, its value could continue
+	 * to increment each time a ticket is created, leading to inconsistent IDs.
+	 * see testTicketsIds() into TicketVOTest class
+	 */
 	private static int nextId = 1;
 	
 	public SeatTicketVO(int number, float price, String seat, EventVO event) {
@@ -46,4 +50,7 @@ public class SeatTicketVO extends TicketVO {
 	public String getSeatOfTicket() {
 		return getSeat();
 	}
+
+
+
 }

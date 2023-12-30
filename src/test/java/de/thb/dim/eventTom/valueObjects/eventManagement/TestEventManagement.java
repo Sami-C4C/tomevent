@@ -1,6 +1,7 @@
 package de.thb.dim.eventTom.valueObjects.eventManagement;
 
 import de.thb.dim.eventTom.valueObjects.ticketSale.TicketVO;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -295,5 +296,13 @@ class TestEventManagement {
         assertNotSame(original, cloned);
     }
 
+    @AfterEach
+    public void teardown() {
+        // Reset all the objects to null to ensure no state is carried over between tests
+        show = null;
+        party = null;
+
+
+    }
 
 }

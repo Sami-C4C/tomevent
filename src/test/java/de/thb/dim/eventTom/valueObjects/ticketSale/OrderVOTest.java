@@ -6,6 +6,7 @@ import de.thb.dim.eventTom.valueObjects.customerManagement.exceptions.CustomerNo
 import de.thb.dim.eventTom.valueObjects.customerManagement.exceptions.CustomerTooYoungException;
 import de.thb.dim.eventTom.valueObjects.eventManagement.EventVO;
 import de.thb.dim.eventTom.valueObjects.eventManagement.PartyVO;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -147,13 +148,13 @@ class OrderVOTest {
     }
 
     @Test
-    void getTicket() {
+    void tesGetTicket() {
         order.addTicket(ticket);
         assertEquals(ticket, order.getTicket(0));
     }
 
     @Test
-    void getNumberOfTickets() {
+    void testGetNumberOfTickets() {
         assertEquals(0, order.getNumberOfTickets());
         order.addTicket(ticket);
         assertEquals(1, order.getNumberOfTickets());
@@ -229,12 +230,12 @@ class OrderVOTest {
 
 
     @Test
-    void equals_ReflexiveProperty_ReturnsTrue() {
+    void testEquals_ReflexiveProperty_ReturnsTrue() {
         assertTrue(order.equals(order));
     }
 
     @Test
-    void equals_SymmetricProperty_ReturnsTrueOrFalseAccordingly() {
+    void testEquals_SymmetricProperty_ReturnsTrueOrFalseAccordingly() {
         OrderVO anotherOrder = new OrderVO(1, StateOfOrderVO.STARTED, testStartTime, customer);
         assertTrue(order.equals(anotherOrder));
         assertTrue(anotherOrder.equals(order));
@@ -245,29 +246,29 @@ class OrderVOTest {
     }
 
     @Test
-    void equals_Null_ReturnsFalse() {
+    void testEquals_Null_ReturnsFalse() {
         assertFalse(order.equals(null));
     }
 
     @Test
-    void equals_DifferentClass_ReturnsFalse() {
+    void testEquals_DifferentClass_ReturnsFalse() {
         assertFalse(order.equals(new Object()));
     }
 
     @Test
-    void hashCode_EqualObjects_ReturnSameHashCode() {
+    void testHashCode_EqualObjects_ReturnSameHashCode() {
         OrderVO anotherOrder = new OrderVO(1, StateOfOrderVO.STARTED, testStartTime, customer);
         assertEquals(order.hashCode(), anotherOrder.hashCode());
     }
 
     @Test
-    void hashCode_DifferentObjects_ReturnDifferentHashCodes() {
+    void testHashCode_DifferentObjects_ReturnDifferentHashCodes() {
         OrderVO differentOrder = new OrderVO(2, StateOfOrderVO.STARTED, testStartTime, customer);
         assertNotEquals(order.hashCode(), differentOrder.hashCode());
     }
 
     @Test
-    void toString_ContainsCorrectInformation() {
+    void test_toString_ContainsCorrectInformation() {
         String orderString = order.toString();
         assertNotNull(orderString);
         assertTrue(orderString.contains("OrderVO " + order.getOrderNr()));
@@ -277,7 +278,7 @@ class OrderVOTest {
     }
 
     @Test
-    void toString_EmptyCart_ReturnsExpectedString() {
+    void test_toString_EmptyCart_ReturnsExpectedString() {
         String orderString = order.toString();
         assertTrue(orderString.contains("OrderVO " + order.getOrderNr()));
         assertTrue(orderString.contains(customer.getLastName() + " " + customer.getFirstName()));
@@ -293,33 +294,33 @@ class OrderVOTest {
 
 
     @Test
-    void addTicket_AddsTicketToOrder() {
+    void testAddTicket_AddsTicketToOrder() {
         order.addTicket(ticket);
         assertTrue(order.getCart().contains(ticket));
     }
 
     @Test
-    void deleteTicket_RemovesTicketByIndex() {
+    void testDeleteTicket_RemovesTicketByIndex() {
         order.addTicket(ticket);
         order.deleteTicket(0);
         assertFalse(order.getCart().contains(ticket));
     }
 
     @Test
-    void deleteTicket_RemovesTicketByReference() {
+    void testDeleteTicket_RemovesTicketByReference() {
         order.addTicket(ticket);
         order.deleteTicket(ticket);
         assertFalse(order.getCart().contains(ticket));
     }
 
     @Test
-    void calculatePriceTickets_CalculatesTotalPrice() {
+    void testCalculatePriceTickets_CalculatesTotalPrice() {
         order.addTicket(ticket);
         assertEquals(99.99f * ticket.getCharge(), order.calculatePriceTickets());
     }
 
     @Test
-    void calculatePriceTickets_WithMultipleTickets_CalculatesCorrectTotal() {
+    void testCalculatePriceTickets_WithMultipleTickets_CalculatesCorrectTotal() {
         order.addTicket(ticket);
         TicketVO anotherTicket = new SeatTicketVO(10, 49.99f, "A2", event);
         order.addTicket(anotherTicket);
@@ -329,7 +330,7 @@ class OrderVOTest {
 
 
     @Test
-    void toString_CartWithNonNullTickets_ReturnsExpectedString() {
+    void test_toString_CartWithNonNullTickets_ReturnsExpectedString() {
         // Mock the TicketVO class
         TicketVO mockedTicket1 = mock(TicketVO.class);
         TicketVO mockedTicket3 = mock(TicketVO.class);
@@ -358,7 +359,7 @@ class OrderVOTest {
 
 
     @Test
-    void hashCode_EqualObjects_HaveSameHashCode() {
+    void testHashCode_EqualObjects_HaveSameHashCode() {
         // Setup a second order object that should be equal to the first
         OrderVO anotherOrder = new OrderVO(order.getOrderNr(), order.getState(), order.getTimestampStartedOrder(), order.getCustomer());
 
@@ -367,7 +368,7 @@ class OrderVOTest {
     }
 
     @Test
-    void hashCode_UnequalObjects_HaveDifferentHashCodes() {
+    void testHashCode_UnequalObjects_HaveDifferentHashCodes() {
         // Setup a second order object that is not equal to the first
         OrderVO differentOrder = new OrderVO(2, StateOfOrderVO.CONFIRMED, LocalDateTime.now().plusDays(1), customer);
 
@@ -376,7 +377,7 @@ class OrderVOTest {
     }
 
     @Test
-    void hashCode_NullFields_HandledCorrectly() {
+    void testHashCode_NullFields_HandledCorrectly() {
         // Set the nullable fields of order to null
         order.setTimestampFinishedOrder(null);
 
@@ -386,6 +387,21 @@ class OrderVOTest {
 
         // Assert that the hash codes are different
         assertNotEquals(order.hashCode(), orderWithFinishedTimestamp.hashCode(), "Objects with different state of nullable fields should have different hash codes.");
+    }
+
+
+    @AfterEach
+    public void teardown() {
+        // Reset all the objects to null to ensure no state is carried over between tests
+        ticket = null;
+        order = null;
+        order2 = null;
+        customer = null;
+
+
+        // If there are any static variables in your TicketVO or related classes, reset them as well
+        // For example, if you have a static nextId in the TicketVO class:
+        // TicketVO.resetNextId(); // Assuming you create a reset method in TicketVO
     }
 
 

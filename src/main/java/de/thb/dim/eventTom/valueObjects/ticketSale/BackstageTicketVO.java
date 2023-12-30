@@ -12,8 +12,9 @@ public class BackstageTicketVO extends TicketVO {
     private static int nextId = 1;
     private CustomerVO customer;
 
+    //  Category should be changed from Seat to Backstage
     public BackstageTicketVO(int number, float price, String seat, EventVO event, CustomerVO customer) {
-        super(number, event.getName() + " Seat " + nextId++, price, event);
+        super(number, event.getName() + " Backstage " + nextId++, price, event);
         this.customer = customer;
     }
 
@@ -69,5 +70,6 @@ public class BackstageTicketVO extends TicketVO {
         sb.append(getSeat() + " +B");
         return sb.toString();
     }
+
 
 }

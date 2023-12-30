@@ -17,20 +17,19 @@ public abstract class TicketVO implements Serializable, Comparable<TicketVO>, Cl
 	protected float basePrice; // price not influenced by charges
 	protected String seat;
 	protected EventVO event;
-
-
-
-
 	protected ArrayList<SeatVO> seats;
+
 
 	public TicketVO(int number, String id, float price, EventVO event) {
 		this.number = number;
 		this.id = id;
-		seats = new ArrayList<SeatVO>(number);
+		seats = new ArrayList<>(number);
 		setPrice(price);
 		setEvent(event);
 	}
-	
+
+
+
 	public float calculatePrice() {
 		return (getBasePrice() * getCharge());
 	}
@@ -41,6 +40,7 @@ public abstract class TicketVO implements Serializable, Comparable<TicketVO>, Cl
 	}
 
 	/**
+	 * @modified by Osama Ahmad, MN:20233244
 	 * addSeat doesn't check the invalid SeatVO value
 	 * @param s
 	 */
@@ -74,7 +74,9 @@ public abstract class TicketVO implements Serializable, Comparable<TicketVO>, Cl
 
 
 	/**
-	 * CloneNotSupportedException is never thrown
+	 * CloneNotSupportedException is never thrown and this function
+	 * doesn't handle the deep cloning of mutable objects. If the
+	 * EventVO or seats are mutable, this could lead to shared references between cloned instances.
 	 * @return
 	 */
 	@Override
@@ -111,6 +113,8 @@ public abstract class TicketVO implements Serializable, Comparable<TicketVO>, Cl
 		result = prime * result + ((seat == null) ? 0 : seat.hashCode());
 		return result;
 	}
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -183,6 +187,8 @@ public abstract class TicketVO implements Serializable, Comparable<TicketVO>, Cl
 	public void setEvent(EventVO event) {
 		this.event = event;
 	}
+
+
 
 
 	public abstract float getCharge();

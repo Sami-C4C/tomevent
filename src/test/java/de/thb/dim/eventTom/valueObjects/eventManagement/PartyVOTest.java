@@ -1,5 +1,6 @@
 package de.thb.dim.eventTom.valueObjects.eventManagement;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -152,6 +153,15 @@ class PartyVOTest {
         party1.setCatering("Catering5");
 
         assertTrue(party1.equals(party2));
+    }
+
+    @AfterEach
+    public void teardown() {
+        // Reset all the objects to null to ensure no state is carried over between tests
+      party1 = null;
+      party2 = null;
+
+
     }
 
 

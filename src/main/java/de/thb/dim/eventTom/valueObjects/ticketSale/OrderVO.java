@@ -28,7 +28,7 @@ public class OrderVO implements Serializable {
 		setState(state);
 		setTimestampStartedOrder(timestampStartedOrder);
 		setCustomer(customer);
-		cart = new LinkedList<TicketVO>();
+		cart = new LinkedList<>();
 	}
 
 	public int getOrderNr() {
