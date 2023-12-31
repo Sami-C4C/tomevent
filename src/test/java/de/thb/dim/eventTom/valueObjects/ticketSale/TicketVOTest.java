@@ -53,7 +53,7 @@ public class TicketVOTest {
         LocalDate endOfShow = showEndTime.toLocalDate();
 
 
-        Duration runtime = Duration.ofHours(3);
+        Duration runtime = Duration.ofHours(4);
 
         party = new PartyVO(1, "Party 1", partyEquipment, "Club XYZ", partyDate, "Buffet", "DJ John");
         show = new ShowVO(2, "Show 1", showEquipment, "Theater ABC", showDate, runtime, 1);
@@ -86,7 +86,7 @@ public class TicketVOTest {
     }
 
     @Test
-    public void testGetPrice() {
+    public void testGetPriceAndCalculatePrice() {
         // Assuming getCharge returns 1.0 in the mock
         float actualBasePrice = 100.0f; // Example price calculation
         assertEquals(actualBasePrice, ticketMock.getBasePrice(), 0.0);
@@ -97,11 +97,14 @@ public class TicketVOTest {
         assertEquals(200.0, ticketMock.calculatePrice(), 0.0);
     }
 
+
     @Test
-    public void testCalculatePrice() {
+    public void testCalculatePriceWithGetSeat() {
         // Assuming getCharge returns 2.0 in the mock
-        float expectedPrice = 200.0f; // Example price calculation
+        float expectedPrice = 200.0f; // Example price calculation.<==> (2 * 100)
+
         assertEquals(expectedPrice, ticketMock.calculatePrice(), 0.0);
+        assertEquals("Seat-A345", ticketMock.getSeatOfTicket());
     }
 
 
