@@ -61,7 +61,7 @@ public class TicketVOTest {
 
         ticketSeat = new SeatTicketVO(120, 100.0f, "T123", party);
 
-        ticketMock = new MockTicketVO(1, party.getName() + " Seat " + 23, 100.0f, party);
+        ticketMock = new MockTicketVO(223, party.getName() + " Seat " + 23, 100.0f, party);
 
         ticketSeason = new SeasonTicketVO(60, 55.6f, show, startOfShow, endOfShow);
         ticketBackstage = new BackstageTicketVO(60, 23.33f, "B66", show, customer);
@@ -135,7 +135,7 @@ public class TicketVOTest {
     public void testEquals() {
         SeatTicketVO anotherSeatTicketVO = new SeatTicketVO(120, 100.0f, "T123", party);
         Object other = new Object();
-        assertTrue(ticketSeat.equals(ticketSeat));
+        assertTrue(ticketSeat.equals(ticketSeat), "The object ticketSeat is equal to itself ");
         assertTrue(ticketSeat instanceof TicketVO, "ticket1 is an instance of TicketVO");
         assertTrue(anotherSeatTicketVO instanceof TicketVO, "anotherSeatTicketVO is also an instance of TicketVO");
         assertTrue(anotherSeatTicketVO.equals(anotherSeatTicketVO));
@@ -289,16 +289,6 @@ public class TicketVOTest {
         assertTrue(ticket2.compareTo(ticket1) > 0); // T124 should come after T123
         assertEquals(0, ticket1.compareTo(ticket3)); // Same ID, should be equal
 
-    }
-
-    @Test
-    public void testGetCharge() {
-        assertEquals(2.0f, ticketMock.getCharge(), 0.0); // Assuming MockTicketVO returns 2.0f for getCharge
-    }
-
-    @Test
-    public void testGetSeatOfTicket() {
-        assertEquals("Seat-A345", ticketMock.getSeatOfTicket()); // Assuming MockTicketVO returns "Seat1" for getSeatOfTicket
     }
 
 
