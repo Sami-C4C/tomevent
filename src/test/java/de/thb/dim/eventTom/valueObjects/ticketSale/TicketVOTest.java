@@ -317,7 +317,7 @@ public class TicketVOTest {
 
     @Test
     public void testEquals_CompletelyDifferent() {
-        TicketVO completelyDifferentTicket = new MockTicketVO(2, "T125", 200.0f, show);
+        TicketVO completelyDifferentTicket = new MockTicketVO(211, "T125", 200.0f, show);
         assertFalse(ticketSeat.equals(completelyDifferentTicket), "Should return false since all attributes are different");
     }
 
@@ -387,9 +387,64 @@ public class TicketVOTest {
     }
 
 
+
+    /*
+     * Each ticket category (SeatTicketVO, SeasonTicketVO, and BackstageTicketVO) is
+     * associated with a number of seats corresponding to the number of tickets inside each category.
+     */
+    @Test
+    public void testTicketCategoriesAndSeatAssignments() throws CustomerNoDateOfBirthException, CustomerTooYoungException {
+
+        int seatTicketsCount = 10;
+        int seasonTicketsCount = 5;
+        int backstageTicketsCount = 3;
+
+        // Act
+        // Create and add seats to SeatTicketVO
+        TicketVO[] seatTickets = new TicketVO[seatTicketsCount];
+        for (int i = 0; i < seatTicketsCount; i++) {
+            seatTickets[i] = new SeatTicketVO(i + 1, 100.0f, "S" + (i + 1), party);
+            seatTickets[i].addSeat(new SeatVO(1, i + 1));
+        }
+
+        // Create and add seats to SeasonTicketVO
+        TicketVO[] seasonTickets = new TicketVO[seasonTicketsCount];
+        for (int i = 0; i < seasonTicketsCount; i++) {
+            seasonTickets[i] = new SeasonTicketVO(i + 1, 200.0f, show, LocalDate.now(), LocalDate.now().plusDays(30));
+            seasonTickets[i].addSeat(new SeatVO(2, i + 1));
+        }
+
+        // Create and add seats to BackstageTicketVO
+        TicketVO[] backstageTickets = new TicketVO[backstageTicketsCount];
+        for (int i = 0; i < backstageTicketsCount; i++) {
+            backstageTickets[i] = new BackstageTicketVO(i + 1, 300.0f, "B" + (i + 1), show, customer);
+            backstageTickets[i].addSeat(new SeatVO(3, i + 1));
+        }
+
+        // Assert
+        // Check the correct number of seats and IDs for SeatTicketVO
+        for (int i = 0; i < seatTicketsCount; i++) {
+            assertEquals(1, seatTickets[i].seats.size(), "SeatTicket should have 1 seat");
+            assertTrue(seatTickets[i].getId().startsWith(party.getName() + " Seat "), "SeatTicket ID should be correctly formatted");
+        }
+
+        // Check the correct number of seats and IDs for SeasonTicketVO
+        for (int i = 0; i < seasonTicketsCount; i++) {
+            assertEquals(1, seasonTickets[i].seats.size(), "SeasonTicket should have 1 seat");
+            assertTrue(seasonTickets[i].getId().startsWith(show.getName() + " Season "), "SeasonTicket ID should be correctly formatted");
+        }
+
+        // Check the correct number of seats and IDs for BackstageTicketVO
+        for (int i = 0; i < backstageTicketsCount; i++) {
+            assertEquals(1, backstageTickets[i].seats.size(), "BackstageTicket should have 1 seat");
+            assertTrue(backstageTickets[i].getId().startsWith(show.getName() + " Backstage "), "BackstageTicket ID should be correctly formatted");
+        }
+    }
+
+
     @AfterEach
     public void teardown() {
-        // Reset all the objects to null to ensure no state is carried over between tests
+        // Reset all the objects to null to ensure no state is carried over between tests.
         ticketSeat = null;
         ticketMock = null;
         ticketSeason = null;
