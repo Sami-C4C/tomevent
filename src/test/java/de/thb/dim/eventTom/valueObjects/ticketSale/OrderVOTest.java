@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
  */
 class OrderVOTest {
 
-    private OrderVO order, order2;
+    private OrderVO order;
     private CustomerVO customer;
     private TicketVO ticket;
     private EventVO event;
@@ -395,13 +395,8 @@ class OrderVOTest {
         // Reset all the objects to null to ensure no state is carried over between tests
         ticket = null;
         order = null;
-        order2 = null;
         customer = null;
 
-
-        // If there are any static variables in your TicketVO or related classes, reset them as well
-        // For example, if you have a static nextId in the TicketVO class:
-        // TicketVO.resetNextId(); // Assuming you create a reset method in TicketVO
     }
 
 

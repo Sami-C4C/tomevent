@@ -17,7 +17,7 @@ class NoCustomerExceptionTest {
 
     @Test
     void messageConstructor_MessageIsCorrect() {
-        String customMessage = "Custom message for NoCustomerException";
+        String customMessage = "No Customer found";
         NoCustomerException exception = new NoCustomerException(customMessage);
         assertEquals(customMessage, exception.getMessage());
     }

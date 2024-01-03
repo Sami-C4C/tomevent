@@ -1,7 +1,6 @@
 package de.thb.dim.eventTom.valueObjects.ticketSale;
 
-import de.thb.dim.eventTom.valueObjects.customerManagement.CustomerVO;
-import de.thb.dim.eventTom.valueObjects.customerManagement.Gender;
+
 import de.thb.dim.eventTom.valueObjects.customerManagement.exceptions.CustomerNoDateOfBirthException;
 import de.thb.dim.eventTom.valueObjects.customerManagement.exceptions.CustomerTooYoungException;
 import de.thb.dim.eventTom.valueObjects.eventManagement.EventVO;
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,7 +32,7 @@ class SeatTicketVOTest {
 
 
     @BeforeEach
-    public void setUp() throws CustomerNoDateOfBirthException, CustomerTooYoungException {
+    public void setUp(){
 
         String[] partyEquipment = {"Sound System", "Lights", "Speaker", "Smart-DJ"};
         String[] showEquipment = {"Lights", "Speaker", "Furniture"};
@@ -58,7 +56,7 @@ class SeatTicketVOTest {
         ticket1 = new SeatTicketVO(100, 100.0f, "A1", event4);
         ticket2 = new SeatTicketVO(100, 100.0f, "A1", event4);
         ticket3 = new SeatTicketVO(100, 200.0f, "A2", event4);
-        ticket4 = new SeasonTicketVO(100, 100.0f, event4, showStartTime.toLocalDate(), showEndTime.toLocalDate());
+        ticket4 = new SeasonTicketVO(100, 100.0f, event3, showStartTime.toLocalDate(), showEndTime.toLocalDate());
 
 //        customer3 = new CustomerVO("Gieske", "Antonia", "Gertraudenstr", 77, Gender.F, LocalDate.of(1997, 4, 13));
 

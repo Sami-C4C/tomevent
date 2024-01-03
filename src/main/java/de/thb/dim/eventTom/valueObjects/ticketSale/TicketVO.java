@@ -169,11 +169,6 @@ public abstract class TicketVO implements Serializable, Comparable<TicketVO>, Cl
 	}
 
 
-	public EventVO getEvent() {
-		return event;
-	}
-
-
 	public void setPrice(float basePrice) {
 		this.basePrice = basePrice;
 	}
@@ -188,8 +183,19 @@ public abstract class TicketVO implements Serializable, Comparable<TicketVO>, Cl
 		this.event = event;
 	}
 
+	public EventVO getEvent() {
+		return event;
+	}
 
 
+	/**
+	 * @author Osama Ahmad, MN: 20233244
+	 * I made getter and setter for event abstract, because the Season-ticket and Backstage-ticket are not available for party
+	 * therefore I have implemented both function into all ticketcategories to check the suitable event-type for each ticket-category
+	 * @return
+	 */
+/*	public abstract EventVO getEvent();
+	public abstract void setEvent(EventVO event);*/
 
 	public abstract float getCharge();
 	

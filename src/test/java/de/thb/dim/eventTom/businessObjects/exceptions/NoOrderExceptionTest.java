@@ -17,7 +17,7 @@ class NoOrderExceptionTest {
 
     @Test
     void messageConstructor_MessageIsCorrect() {
-        String customMessage = "Custom message for NoOrderException";
+        String customMessage = "No Order found";
         NoOrderException exception = new NoOrderException(customMessage);
         assertEquals(customMessage, exception.getMessage());
     }

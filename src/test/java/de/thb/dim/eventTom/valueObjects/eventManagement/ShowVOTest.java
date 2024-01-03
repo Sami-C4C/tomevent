@@ -29,9 +29,8 @@ class ShowVOTest {
     }
 
 
-
     @Test
-    public void testEquals(){
+    public void testEquals() {
         assertTrue(show1.equals(show1), "A show must equal itself.");
         assertFalse(show1.equals(null), "A show should not equal null.");
         Object otherObject = new Object();
@@ -47,6 +46,40 @@ class ShowVOTest {
         assertTrue(showWithNullRuntime.equals(anotherShowWithNullRuntime), "Two shows with null runtimes should be equal.");
 
         assertFalse(show1.equals(showWithNullRuntime) && showDifferentRuntime.equals(show1), "A show with a runtime should not equal a show with a null runtime.");
+
+    }
+
+    //Test for getClass() != obj.getClass()
+    @Test
+    void testEqualsWithDifferentClasses() {
+        // Create a subclass of ShowVO to simulate a different class comparison.
+        class SubShowVO extends ShowVO {
+            public SubShowVO(int id, String name, String[] equipment, String location, LocalDateTime date, Duration runtime, int anzCategory) {
+                super(id, name, equipment, location, date, runtime, anzCategory);
+            }
+        }
+
+        EventVO event = new EventVO(1, "Concert", new String[]{"Microphone", "Speakers"}, "City Hall", date, 2) {
+        }; // Using an anonymous subclass because EventVO is abstract
+
+        // Create an instance of the subclass.
+        ShowVO subShowVO = new SubShowVO(1, "Show A", new String[]{"Sound", "Lights"}, "Theatre", date, runtime, 100);
+
+        // Assert that show1 does not equal an object of a different class.
+        assertFalse(show1.equals(subShowVO), "ShowVO should not be equal to an object of a subclass.");
+        assertFalse(show1.equals(event), "ShowVO should not be equal to an object of a subclass.");
+
+    }
+
+    //Test for if (other.runtime != null)
+    @Test
+    void testEqualsWithNullRuntimeInOneAndNonNullInOther() {
+        // Create a show with null runtime
+        ShowVO showWithNullRuntime = new ShowVO(1, "Show A", new String[]{"Sound", "Lights"}, "Theatre", date, null, 100);
+
+        // Assert that a show with a runtime does not equal a show with a null runtime.
+        assertFalse(show1.equals(showWithNullRuntime), "A show with a runtime should not equal a show with a null runtime.");
+        assertFalse(showWithNullRuntime.equals(show1), "A show with a null runtime should not equal a show with a runtime.");
     }
 
 
@@ -61,8 +94,6 @@ class ShowVOTest {
         ShowVO subShow = new SubShowVO(1, "Show A", new String[]{"Sound", "Lights"}, "Theatre", date, runtime, 100);
         assertFalse(show1.equals(subShow), "ShowVO should not be equal to a subclass instance.");
     }
-
-
 
 
     @Test
@@ -232,8 +263,8 @@ class ShowVOTest {
     @AfterEach
     public void teardown() {
         // Reset all the objects to null to ensure no state is carried over between tests
-       show1 = null;
-       show2 = null;
+        show1 = null;
+        show2 = null;
 
     }
 

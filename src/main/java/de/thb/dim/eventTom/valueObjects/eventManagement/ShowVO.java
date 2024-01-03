@@ -5,14 +5,12 @@ import java.time.LocalDateTime;
 
 public class ShowVO extends EventVO {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1L;
     private Duration runtime;
 
 
-    public ShowVO(int id, String name, String[] equipment, String location, LocalDateTime date, Duration runtime, int anzCategory) {
+    public ShowVO(int id, String name, String[] equipment, String location, LocalDateTime date, Duration runtime, int anzCategory)throws NullPointerException,IllegalArgumentException {
         super(id, name, equipment, location, date, anzCategory);
         setRuntime(runtime);
 

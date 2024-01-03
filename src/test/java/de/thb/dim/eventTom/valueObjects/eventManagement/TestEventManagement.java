@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Answers.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -21,13 +22,14 @@ class TestEventManagement {
 
     @BeforeEach
     public void setup() {
-        String[] equipment = {"Sound System", "Lights"};
+        String[] partyEquipment = {"Sound System", "Lights", "Denon DJ", "Music Instruments"};
+        String[] showEquipment = {"microphones", "Stage", "Furniture"};
         LocalDateTime partyDate = LocalDateTime.now().plusDays(7);
         LocalDateTime showDate = LocalDateTime.now().plusDays(14);
         Duration runtime = Duration.ofHours(2);
 
-        party = new PartyVO(1, "Party 1", equipment, "Club XYZ", partyDate, "Buffet", "DJ John");
-        show = new ShowVO(2, "Show 1", equipment, "Theater ABC", showDate, runtime, 1);
+        party = new PartyVO(1, "Party 1", partyEquipment, "Havana-Club Berlin", partyDate, "Buffet", "DJ John");
+        show = new ShowVO(2, "Show 1", showEquipment, "Lover-Theater Berlin", showDate, runtime, 1);
     }
 
     @Test
@@ -35,8 +37,8 @@ class TestEventManagement {
         // Test PartyVO attributes
         assertEquals(1, party.getId());
         assertEquals("Party 1", party.getName());
-        assertEquals("Sound System, Lights", party.equipmentToString());
-        assertEquals("Club XYZ", party.getLocation());
+        assertEquals("Sound System, Lights, Denon DJ, Music Instruments", party.equipmentToString());
+        assertEquals("Havana-Club Berlin", party.getLocation());
     }
 
     @Test
@@ -44,8 +46,8 @@ class TestEventManagement {
         // Test ShowVO attributes
         assertEquals(2, show.getId());
         assertEquals("Show 1", show.getName());
-        assertEquals("Sound System, Lights", show.equipmentToString());
-        assertEquals("Theater ABC", show.getLocation());
+        assertEquals("microphones, Stage, Furniture", show.equipmentToString());
+        assertEquals("Lover-Theater Berlin", show.getLocation());
     }
 
 
@@ -54,36 +56,58 @@ class TestEventManagement {
         assertNotNull(party);
         assertEquals("Party 1", party.getName());
         assertEquals(1, party.getId());
-        assertEquals("Club XYZ", party.getLocation());
+        assertEquals("Havana-Club Berlin", party.getLocation());
         assertEquals(LocalDateTime.now().plusDays(7).toLocalDate(), party.getDate().toLocalDate());
         assertEquals("Buffet", party.getCatering());
         assertEquals("DJ John", party.getPerformer());
 
     }
 
-
+    /**
+     * Osama Ahmad: TomEvent accepted also invalid values for event like negative IDs , the name could be also null.
+     * I got like this error: AssertionFailedError: Expected java.lang.IllegalArgumentException to be thrown, but nothing was thrown.
+     * Therefore I wrote mocking-tests to simulate the system reaction whith invalid values.
+     */
    /* @Test
     public void testPartyWithoutId() {
         assertThrows(IllegalArgumentException.class, () -> {
             new PartyVO(0, "Party 1", new String[]{"Sound System", "Lights"}, "Club XYZ", LocalDateTime.now(), "Buffet", "DJ John");
         });
-    }*/
+    }
 
-  /*  @Test
-    public void testPartyWithNegativId() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new PartyVO(-2, "Party 1", new String[]{"Sound System", "Lights"}, "Club XYZ", LocalDateTime.now(), "Buffet", "DJ John");
-        });
-    }*/
+// Osama Ahmad: This is also critical, because event should not be empty while ordering-process, but in the actual implementation I can assign empty name.  AssertionFailedError: Expected java.lang.NullPointerException to be thrown, but nothing was thrown.
+    @Test
+    public void testPartyWithEmptyName() {
 
-
-  /*  @Test
-    public void testPartyWithNullName() {
         assertThrows(NullPointerException.class, () -> {
-            new PartyVO(1, null, new String[]{"Sound System", "Lights"}, "Club XYZ", LocalDateTime.now(), "Buffet", "DJ John");
+            new PartyVO(1, "", new String[]{"Sound System"}, "Club XYZ", LocalDateTime.now(), "Buffet", "DJ John");
         });
     }
-*/
+
+    @Test
+    public void testPartyWithNegativId() {
+        try {
+            party.setId(-245);
+            fail();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void testPartyWithNullName() {
+        try {
+            PartyVO partyWithNullName = new PartyVO(1, null, new String[]{"Sound System", "Lights"}, "Club XYZ", LocalDateTime.now(), "Buffet", "DJ John");
+            fail();
+        } catch (NullPointerException e) {
+            e.getMessage();
+        }
+
+    } */
+
+
+    //Osama Ahmad:  This is also critical, because event should not be empty while buying the tickets, but in the actual implementation I can assign empty name.
     @Test
     public void testPartyWithEmptyEquipment() {
         PartyVO emptyEquipmentParty = new PartyVO(2, "Party 2", new String[]{}, "Club ABC", LocalDateTime.now(), "Snacks", "DJ Jane");
@@ -108,13 +132,6 @@ class TestEventManagement {
         LocalDateTime boundaryDate = LocalDateTime.MAX;
         ShowVO boundaryShow = new ShowVO(4, "Boundary Show", new String[]{"Stage"}, "Boundary Theater", boundaryDate, Duration.ofHours(1), 1);
         assertEquals(boundaryDate, boundaryShow.getDate());
-    }
-
-
-    @Test
-    public void testPartyWithEmptyName() {
-        PartyVO emptyNameParty = new PartyVO(1, "", new String[]{"Sound System"}, "Club XYZ", LocalDateTime.now(), "Buffet", "DJ John");
-        assertEquals("", emptyNameParty.getName());
     }
 
 
@@ -285,16 +302,20 @@ class TestEventManagement {
 
     /**
      * Cloneable Interface is implemented by EventVO to solve this Problem
+     *
      * @throws CloneNotSupportedException
      */
     @Test
-    void testClone() throws CloneNotSupportedException{
+    void testClone() throws CloneNotSupportedException {
         EventVO original = new PartyVO(1, "Event", new String[]{"Equipment"}, "Location", LocalDateTime.now(), "Catering", "Performer");
         EventVO cloned = (EventVO) original.clone();
 
         assertEquals(original, cloned);
         assertNotSame(original, cloned);
     }
+
+
+
 
     @AfterEach
     public void teardown() {

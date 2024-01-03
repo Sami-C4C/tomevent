@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 /**
@@ -34,6 +35,9 @@ public class TicketVOTest {
     private SeatVO seat;
     private CustomerVO customer;
 
+    LocalDateTime partyDate, showDate, showStartTime, showEndTime;
+    LocalDate startOfShow, endOfShow;
+
 
     @BeforeEach
     public void setUp() throws CustomerNoDateOfBirthException, CustomerTooYoungException {
@@ -43,14 +47,14 @@ public class TicketVOTest {
         String[] partyEquipment = {"Sound System", "Lights", "Speaker", "Smart-DJ"};
         String[] showEquipment = {"Lights", "Speaker", "Furniture"};
 
-        LocalDateTime partyDate = LocalDateTime.of(2023, 12, 31, 22, 00);
-        LocalDateTime showDate = LocalDateTime.now().plusDays(14);
-        LocalDateTime showStartTime = LocalDateTime.of(2024, 3, 13, 18, 00);
-        LocalDateTime showEndTime = LocalDateTime.of(2024, 4, 13, 23, 00);
+        partyDate = LocalDateTime.of(2023, 12, 31, 22, 00);
+        showDate = LocalDateTime.now().plusDays(14);
+        showStartTime = LocalDateTime.of(2024, 3, 13, 18, 00);
+        showEndTime = LocalDateTime.of(2024, 4, 13, 23, 00);
 
         // Convert LocalDateTime to LocalDate
-        LocalDate startOfShow = showStartTime.toLocalDate();
-        LocalDate endOfShow = showEndTime.toLocalDate();
+        startOfShow = showStartTime.toLocalDate();
+        endOfShow = showEndTime.toLocalDate();
 
 
         Duration runtime = Duration.ofHours(4);
@@ -328,22 +332,6 @@ public class TicketVOTest {
     }
 
 
-    private static class MockTicketVO extends TicketVO {
-        public MockTicketVO(int number, String id, float price, EventVO event) {
-            super(number, id, price, event);
-        }
-
-        @Override
-        public float getCharge() {
-            return 2.0f; // Mock implementation
-        }
-
-        @Override
-        public String getSeatOfTicket() {
-            return "Seat-A345";
-        }
-    }
-
     /*
      * The number of seats inside the ticket-category should be matched with
      * the number of available tickets inside this category.
@@ -387,13 +375,12 @@ public class TicketVOTest {
     }
 
 
-
     /*
      * Each ticket category (SeatTicketVO, SeasonTicketVO, and BackstageTicketVO) is
      * associated with a number of seats corresponding to the number of tickets inside each category.
      */
     @Test
-    public void testTicketCategoriesAndSeatAssignments() throws CustomerNoDateOfBirthException, CustomerTooYoungException {
+    public void testTicketCategoriesAndSeatAssignments() {
 
         int seatTicketsCount = 10;
         int seasonTicketsCount = 5;
@@ -438,6 +425,66 @@ public class TicketVOTest {
         for (int i = 0; i < backstageTicketsCount; i++) {
             assertEquals(1, backstageTickets[i].seats.size(), "BackstageTicket should have 1 seat");
             assertTrue(backstageTickets[i].getId().startsWith(show.getName() + " Backstage "), "BackstageTicket ID should be correctly formatted");
+        }
+    }
+
+
+
+
+    @Test
+    public void testAssignPartyToAllTicketTypesMock() {
+        // Arrange
+        EventVO party = Mockito.mock(EventVO.class);
+        when(party.getName()).thenReturn("Party 1");
+
+        // Assert that assigning a party to a SeatTicketVO does not throw an exception
+        assertDoesNotThrow(() -> new SeatTicketVO(1, 100.0f, "T123", party), "SeatTicketVO should accept parties");
+        assertDoesNotThrow(() -> new SeasonTicketVO(1, 100.0f, party,startOfShow,endOfShow), "SeasonTicketVO should not accept parties");
+        assertDoesNotThrow(() -> new BackstageTicketVO(1, 300.0f, "B123", party, customer), "BackstageTicketVO should not accept shows");
+
+    }
+
+
+
+    @Test
+    public void testAssignPartyToSeasonTicket() {
+        assertThrows(IllegalArgumentException.class, () -> new SeasonTicketVO(1, 200.0f, party, LocalDate.now(), LocalDate.now().plusDays(30)));
+    }
+
+    @Test
+    public void testAssignPartyToBackstageTicket() {
+        assertThrows(IllegalArgumentException.class, () -> new BackstageTicketVO(1, 300.0f, "B123", party, customer));
+    }
+
+
+    @Test
+    public void testAssignShowToAllTicketTypes() {
+        // Arrange
+        EventVO show = Mockito.mock(EventVO.class);
+        when(show.getName()).thenReturn("Show 1");
+        CustomerVO customer = Mockito.mock(CustomerVO.class); // Mock the CustomerVO
+
+        // Assert that assigning a show to any ticket type does not throw an exception
+        assertDoesNotThrow(() -> new SeatTicketVO(1, 100.0f, "T123", show), "SeatTicketVO should accept shows");
+        assertDoesNotThrow(() -> new SeasonTicketVO(1, 200.0f, show, LocalDate.now(), LocalDate.now().plusDays(30)), "SeasonTicketVO should accept shows");
+        assertDoesNotThrow(() -> new BackstageTicketVO(1, 300.0f, "B123", show, customer), "BackstageTicketVO should accept shows");
+
+    }
+
+
+    private static class MockTicketVO extends TicketVO {
+        public MockTicketVO(int number, String id, float price, EventVO event) {
+            super(number, id, price, event);
+        }
+
+        @Override
+        public float getCharge() {
+            return 2.0f; // Mock implementation
+        }
+
+        @Override
+        public String getSeatOfTicket() {
+            return "Seat-A345";
         }
     }
 

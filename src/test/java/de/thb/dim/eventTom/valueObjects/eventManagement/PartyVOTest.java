@@ -34,6 +34,7 @@ class PartyVOTest {
 
         Object otherObject = new Object();
         assertFalse(party1.equals(otherObject), "A party should not equal an object of a different class.");
+        assertFalse(otherObject instanceof PartyVO);
 
         PartyVO differentCatering = new PartyVO(1, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, "Full Bar", "DJ John");
         assertFalse(party1.equals(differentCatering), "Parties with different catering should not be equal.");
@@ -52,6 +53,7 @@ class PartyVOTest {
 
         PartyVO anotherPartyWithNullPerformer = new PartyVO(1, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, "Buffet", null);
         assertTrue(partyWithNullPerformer.equals(anotherPartyWithNullPerformer), "Two parties with null performers should be equal.");
+
     }
 
 
@@ -158,8 +160,8 @@ class PartyVOTest {
     @AfterEach
     public void teardown() {
         // Reset all the objects to null to ensure no state is carried over between tests
-      party1 = null;
-      party2 = null;
+        party1 = null;
+        party2 = null;
 
 
     }
