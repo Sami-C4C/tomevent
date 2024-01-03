@@ -169,6 +169,14 @@ public abstract class TicketVO implements Serializable, Comparable<TicketVO>, Cl
 	}
 
 
+<<<<<<< HEAD
+=======
+	public EventVO getEvent() {
+		return event;
+	}
+
+
+>>>>>>> 74a3395 (init)
 	public void setPrice(float basePrice) {
 		this.basePrice = basePrice;
 	}
@@ -183,6 +191,7 @@ public abstract class TicketVO implements Serializable, Comparable<TicketVO>, Cl
 		this.event = event;
 	}
 
+<<<<<<< HEAD
 	public EventVO getEvent() {
 		return event;
 	}
@@ -196,6 +205,10 @@ public abstract class TicketVO implements Serializable, Comparable<TicketVO>, Cl
 	 */
 /*	public abstract EventVO getEvent();
 	public abstract void setEvent(EventVO event);*/
+=======
+
+
+>>>>>>> 74a3395 (init)
 
 	public abstract float getCharge();
 	

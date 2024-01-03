@@ -18,6 +18,9 @@ public interface ITicketOrdering {
 	public List<TicketVO> sortCart() throws NoOrderException;
 	public List<TicketVO> sortCartByEvent() throws NoOrderException;
 	public List<TicketVO> sortCartByPrice() throws NoOrderException;
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 74a3395 (init)
 }

@@ -2,7 +2,10 @@ package de.thb.dim.eventTom.valueObjects.ticketSale;
 
 import de.thb.dim.eventTom.valueObjects.customerManagement.CustomerVO;
 import de.thb.dim.eventTom.valueObjects.eventManagement.EventVO;
+<<<<<<< HEAD
 import de.thb.dim.eventTom.valueObjects.eventManagement.PartyVO;
+=======
+>>>>>>> 74a3395 (init)
 
 public class BackstageTicketVO extends TicketVO {
 
@@ -60,6 +63,7 @@ public class BackstageTicketVO extends TicketVO {
     }
 
 
+<<<<<<< HEAD
     /**
      * @author Osama Ahmad, MN:20233244
      * setEvent and getEvent are implemented by Osama ahmad.
@@ -81,6 +85,8 @@ public class BackstageTicketVO extends TicketVO {
 
 
 
+=======
+>>>>>>> 74a3395 (init)
     @Override
     public float getCharge() {
         return 1.2f;
