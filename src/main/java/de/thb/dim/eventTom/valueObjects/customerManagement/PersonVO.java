@@ -41,16 +41,10 @@ abstract class PersonVO implements Serializable {
         return houseNr;
     }
 
-    public void setLastName(String lastName) {
-        if (lastName == null || lastName == "") {
-            throw new NullPointerException("lastName cannot be null");
-        }
-        this.lastName = lastName;
-    }
 
-	/*public void setLastName(String lastName) {
+	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}*/
+	}
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;

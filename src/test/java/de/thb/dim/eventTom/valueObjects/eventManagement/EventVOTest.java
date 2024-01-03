@@ -11,7 +11,6 @@ import de.thb.dim.eventTom.valueObjects.ticketSale.TicketVO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import sun.util.resources.LocaleData;
 
 import java.time.Duration;
 import java.time.LocalDate;
