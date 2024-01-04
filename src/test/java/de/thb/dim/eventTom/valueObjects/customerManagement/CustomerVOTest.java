@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class CustomerVOTest {
 
-
     private CustomerVO customer;
     private TicketVO ticket;
     private EventVO event;
@@ -41,7 +40,7 @@ class CustomerVOTest {
     private int houseNr;
 
     @BeforeEach
-    void setUp() throws CustomerNoDateOfBirthException, CustomerTooYoungException {
+    void setUp(){
         // default customer for each test
         dob = LocalDate.of(1990, 1, 1);
         invalidDob = LocalDate.now().plusDays(1); // Future date, should cause exception
