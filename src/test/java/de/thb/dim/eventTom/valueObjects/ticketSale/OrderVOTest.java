@@ -36,13 +36,13 @@ class OrderVOTest {
         customer = new CustomerVO("Ahmad", "Osama", "Berlinerstr", 23, Gender.M, LocalDate.of(1990, 1, 2));
         event = new PartyVO(1, "Party Event", new String[]{"Speaker", "Microphone"}, "Event Hall", testStartTime, "Catering", "DJ");
         ticket = new SeatTicketVO(10, 99.99f, "A1", event);
-        order = new OrderVO(1, StateOfOrderVO.STARTED, testStartTime, customer);
+        order = new OrderVO(202400001, StateOfOrderVO.STARTED, testStartTime, customer);
 
     }
 
     @Test
     void getOrderNr() {
-        assertEquals(1, order.getOrderNr());
+        assertEquals(202400001, order.getOrderNr());
     }
 
     @Test
@@ -172,7 +172,7 @@ class OrderVOTest {
         int expectedHashCode = 1;
 
         // Assuming specific values for the state of the order
-        int orderNr = 1;
+        int orderNr = 202400001;
         StateOfOrderVO state = StateOfOrderVO.STARTED;
         LocalDateTime timestampStartedOrder = LocalDateTime.of(2023, 12, 18, 12, 0);
         LocalDateTime timestampFinishedOrder = LocalDateTime.of(2023, 12, 19, 12, 0);
@@ -210,13 +210,10 @@ class OrderVOTest {
 
 
 
-
-
-
     @Test
     void testEquals() {
-        OrderVO sameOrder = new OrderVO(1, StateOfOrderVO.STARTED, LocalDateTime.now(), customer);
-        OrderVO differentOrder = new OrderVO(2, StateOfOrderVO.CONFIRMED, LocalDateTime.now().plusDays(1), customer);
+        OrderVO sameOrder = new OrderVO(202400001, StateOfOrderVO.STARTED, LocalDateTime.now(), customer);
+        OrderVO differentOrder = new OrderVO(202400002, StateOfOrderVO.CONFIRMED, LocalDateTime.now().plusDays(1), customer);
         assertEquals(order, sameOrder);
         assertNotEquals(order, differentOrder);
     }
@@ -236,7 +233,7 @@ class OrderVOTest {
 
     @Test
     void testEquals_SymmetricProperty_ReturnsTrueOrFalseAccordingly() {
-        OrderVO anotherOrder = new OrderVO(1, StateOfOrderVO.STARTED, testStartTime, customer);
+        OrderVO anotherOrder = new OrderVO(202400001, StateOfOrderVO.STARTED, testStartTime, customer);
         assertTrue(order.equals(anotherOrder));
         assertTrue(anotherOrder.equals(order));
 
@@ -257,7 +254,7 @@ class OrderVOTest {
 
     @Test
     void testHashCode_EqualObjects_ReturnSameHashCode() {
-        OrderVO anotherOrder = new OrderVO(1, StateOfOrderVO.STARTED, testStartTime, customer);
+        OrderVO anotherOrder = new OrderVO(202400001, StateOfOrderVO.STARTED, testStartTime, customer);
         assertEquals(order.hashCode(), anotherOrder.hashCode());
     }
 
@@ -344,7 +341,7 @@ class OrderVOTest {
         when(mockedTicket3.toString()).thenReturn(expectedTicket3String);
 
         // Create a new order and add the mocked tickets to the cart
-        OrderVO orderWithMocks = new OrderVO(1, StateOfOrderVO.STARTED, testStartTime, customer);
+        OrderVO orderWithMocks = new OrderVO(202400001, StateOfOrderVO.STARTED, testStartTime, customer);
         orderWithMocks.addTicket(mockedTicket1);
         orderWithMocks.addTicket(null); // Intentionally adding a null ticket to the cart
         orderWithMocks.addTicket(mockedTicket3);
@@ -370,7 +367,7 @@ class OrderVOTest {
     @Test
     void testHashCode_UnequalObjects_HaveDifferentHashCodes() {
         // Setup a second order object that is not equal to the first
-        OrderVO differentOrder = new OrderVO(2, StateOfOrderVO.CONFIRMED, LocalDateTime.now().plusDays(1), customer);
+        OrderVO differentOrder = new OrderVO(202400003, StateOfOrderVO.CONFIRMED, LocalDateTime.now().plusDays(1), customer);
 
         // Assert that the two objects do not have the same hash code
         assertNotEquals(order.hashCode(), differentOrder.hashCode(), "Non-equal objects are likely to have different hash codes.");
