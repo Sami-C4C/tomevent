@@ -42,9 +42,9 @@ abstract class PersonVO implements Serializable {
     }
 
     public void setLastName(String lastName) {
-        if (lastName == null || lastName == "") {
+/*        if (lastName == null || lastName == "") {
             throw new NullPointerException("lastName cannot be null");
-        }
+        }*/
         this.lastName = lastName;
     }
 
