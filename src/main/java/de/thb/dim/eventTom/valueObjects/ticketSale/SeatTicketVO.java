@@ -1,10 +1,9 @@
 package de.thb.dim.eventTom.valueObjects.ticketSale;
 
 import de.thb.dim.eventTom.valueObjects.eventManagement.EventVO;
-<<<<<<< HEAD
 import de.thb.dim.eventTom.valueObjects.eventManagement.PartyVO;
-=======
->>>>>>> 74a3395 (init)
+
+
 
 public class SeatTicketVO extends TicketVO {
 
@@ -44,7 +43,6 @@ public class SeatTicketVO extends TicketVO {
 		return true;
 	}
 
-<<<<<<< HEAD
 	/**
 	 * setEvent and getEvent are implemented by Osama ahmad, MN: 20233244.
 	 *  SeatTickets are available for both event-types party and show.
@@ -61,9 +59,6 @@ public class SeatTicketVO extends TicketVO {
 	}*/
 
 
-
-=======
->>>>>>> 74a3395 (init)
 	@Override
 	public float getCharge() {
 		// TODO Auto-generated method stub
