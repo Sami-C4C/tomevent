@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * @author Tobi Emma Nankpan, MN:
+ * @author Tobi Emma Nankpan, MN:20216374
  */
 class CustomerNoDateOfBirthExceptionTest {
 
