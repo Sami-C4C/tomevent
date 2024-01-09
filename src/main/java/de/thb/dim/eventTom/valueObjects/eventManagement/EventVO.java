@@ -1,11 +1,8 @@
 package de.thb.dim.eventTom.valueObjects.eventManagement;
 
 import java.io.Serializable;
-<<<<<<< HEAD
 import java.time.Duration;
 import java.time.LocalDate;
-=======
->>>>>>> 74a3395 (init)
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,11 +54,11 @@ public abstract class EventVO implements Serializable, Cloneable {
         setEquipment(equipment);
         setLocation(location);
         setDate(date);
-<<<<<<< HEAD
+
         this.ticketCategory = new ArrayList<TicketVO>(anzCategory);
-=======
-        this.ticketCategory = new ArrayList<TicketVO>();
->>>>>>> 74a3395 (init)
+
+        //this.ticketCategory = new ArrayList<TicketVO>();
+
     }
 
     /**
@@ -77,7 +74,6 @@ public abstract class EventVO implements Serializable, Cloneable {
 
 
     @Override
-<<<<<<< HEAD
     public EventVO clone() {
         try {
             EventVO cloned = (EventVO) super.clone();
@@ -103,8 +99,6 @@ public abstract class EventVO implements Serializable, Cloneable {
 
 
  /*   @Override
-=======
->>>>>>> 74a3395 (init)
     public Object clone() {
         EventVO event = null;
         try {
@@ -113,17 +107,10 @@ public abstract class EventVO implements Serializable, Cloneable {
             throw new InternalError();
         }
         return event;
-<<<<<<< HEAD
     }*/
 
 
 
-
-
-
-=======
-    }
->>>>>>> 74a3395 (init)
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
@@ -205,12 +192,10 @@ public abstract class EventVO implements Serializable, Cloneable {
             }
         } else if (!location.equals(other.location)) {
             return false;
-<<<<<<< HEAD
+
         }if (name == null) {
-=======
         }
         if (name == null) {
->>>>>>> 74a3395 (init)
             if (other.name != null) {
                 return false;
             }
@@ -246,31 +231,27 @@ public abstract class EventVO implements Serializable, Cloneable {
     }
 
     /**
-<<<<<<< HEAD
      * Modified by Osama Ahmad to test also the invalid IDs values, but I got error because of if (name == null) into equals function
      * therefore I have written mocking-test into EventVO to check also the invalid values for alle setters
      * because I could while testing assign invalid values for price, id, name ...etc.
      * @param id
      */
-    public void setId(int id) {
-        this.id = id;
-    }
 
-=======
-     * c
+
+     /**
      * @param id
      */
-    public void setId(int id) {
-/*        if (id <= 0){
+    /*public void setId(int id) {
+         if (id <= 0){
             throw new IllegalArgumentException("Invalid id" + id);
-        }*/
+        }
+        this.id = id;
+    }*/
+
+    public void setId(int id) {
         this.id = id;
     }
 
-    /*public void setId(int id) {
-        this.id = id;
-    }*/
->>>>>>> 74a3395 (init)
 
     public String getName() {
         return name;
@@ -301,29 +282,25 @@ public abstract class EventVO implements Serializable, Cloneable {
         return backstageTicketPrice;
     }
 
-<<<<<<< HEAD
-    // Osama Ahmad: Mocking-tests are written to check invalid values for Setters
-    public void setName(String name) {
-        this.name = name;
-    }
 
-=======
+    // Osama Ahmad: Mocking-tests are written to check invalid values for Setters
+
     /**
      * corrected for partyWithNullName()
      * @param name
      */
-     public void setName(String name) {
-/*         if(name == null){
+     /*public void setName(String name) {
+        if(name == null){
              throw new NullPointerException("Name cannot be null");
-         }*/
-        this.name = name;
-    }
-
-   /* public void setName(String name) {
+         }
         this.name = name;
     }
 */
->>>>>>> 74a3395 (init)
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
     public void setEquipment(String[] equipment) {
         this.equipment = equipment;
     }
