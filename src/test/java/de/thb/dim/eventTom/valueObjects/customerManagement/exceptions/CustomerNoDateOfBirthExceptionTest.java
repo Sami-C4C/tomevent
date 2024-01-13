@@ -14,6 +14,31 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class CustomerNoDateOfBirthExceptionTest {
 
+
+
+    @Test
+    void testDefaultConstructor() {
+        Exception exception = assertThrows(CustomerNoDateOfBirthException.class, () -> {
+            throw new CustomerNoDateOfBirthException();
+        });
+        assertEquals("There is no date of birth available.", exception.getMessage(), "Default message should match.");
+    }
+
+    @Test
+    void testConstructorWithCustomMessage() {
+        String customMessage = "Custom Date of Birth error";
+        Exception exception = assertThrows(CustomerNoDateOfBirthException.class, () -> {
+            throw new CustomerNoDateOfBirthException(customMessage);
+        });
+        assertEquals(customMessage, exception.getMessage(), "Custom message should match.");
+    }
+
+
+
+
+
+
+
     @Test
     void shouldThrowExceptionWhenDateOfBirthIsNull() {
         assertThrows(CustomerNoDateOfBirthException.class, () -> {
