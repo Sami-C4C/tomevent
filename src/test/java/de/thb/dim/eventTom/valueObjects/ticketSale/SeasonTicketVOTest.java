@@ -29,8 +29,6 @@ class SeasonTicketVOTest {
     private EventVO event;
     private SeasonTicketVO seasonTicket;
     private BackstageTicketVO backStageTicket;
-    /*    private LocalDate startOfSeason;
-        private LocalDate endOfSeason;*/
     Duration runtime;
     LocalDateTime showStartTime, showEndTime;
 
@@ -41,8 +39,6 @@ class SeasonTicketVOTest {
     @BeforeEach
     public void setUp() throws CustomerNoDateOfBirthException, CustomerTooYoungException {
 
-/*        startOfSeason = LocalDate.of(2023, 1, 1);
-        endOfSeason = LocalDate.of(2023, 12, 31);*/
 
         String[] showEquipment = {"Lights", "Speaker", "Furniture"};
 
@@ -65,10 +61,9 @@ class SeasonTicketVOTest {
     }
 
 
-
     @Test
     void test_equals_sameObjectComparison_shouldReturnTrue() {
-        assertTrue(seasonTicket.equals(seasonTicket),"Comparing the same instance should return true.");
+        assertTrue(seasonTicket.equals(seasonTicket), "Comparing the same instance should return true.");
     }
 
 
@@ -100,9 +95,8 @@ class SeasonTicketVOTest {
     }
 
 
-
     @Test
-    void testEquals() {
+    void testEquals() throws CloneNotSupportedException {
         SeasonTicketVO ticket1 = new SeasonTicketVO(1, 100.0f, event, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 6, 1));
         SeasonTicketVO ticket2 = new SeasonTicketVO(100, 100.0f, event, seasonTicket.getStartOfSeason(), seasonTicket.getEndOfSeason());
         assertTrue(seasonTicket.equals(ticket2), "Two tickets with the same attributes should be equal.");
@@ -173,7 +167,7 @@ class SeasonTicketVOTest {
 
 
     @Test
-    void equals_withSameFields_shouldReturnTrue() {
+    void equals_withSameFields_shouldReturnTrue() throws CloneNotSupportedException {
         EventVO sameEvent = (EventVO) event.clone();
         SeasonTicketVO anotherTicket = new SeasonTicketVO(100, 100.0f, sameEvent, showStartTime.toLocalDate(), showEndTime.toLocalDate());
         assertTrue(seasonTicket.equals(anotherTicket));
@@ -261,6 +255,13 @@ class SeasonTicketVOTest {
 
 
     @Test
+    void getSeatOfTicket() {
+        SeasonTicketVO ticket = new SeasonTicketVO(1, 100.0f, event, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 6, 1));
+        ticket.setSeat("A1");
+        assertEquals("A1 +", ticket.getSeatOfTicket(), "Should return the correct seat string.");
+    }
+
+    @Test
     void getCharge() {
         // Assuming LocalDate.now() is 2024-03-01
         SeasonTicketVO ticket = new SeasonTicketVO(1, 100.0f, event, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 10));
@@ -268,52 +269,8 @@ class SeasonTicketVOTest {
         assertEquals(1.0f, charge, "Should return the correct charge based on the time of the season.");
     }
 
-
     @Test
-    void getSeatOfTicket() {
-        SeasonTicketVO ticket = new SeasonTicketVO(1, 100.0f, event, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 6, 1));
-        ticket.setSeat("A1");
-        assertEquals("A1 +", ticket.getSeatOfTicket(), "Should return the correct seat string.");
-    }
-
-
-  /*  @Test
-    void getCharge_variousScenarios() {
-        // Define the season period
-        LocalDate startOfSeason = LocalDate.of(2024, 1, 1);
-        LocalDate endOfSeason = LocalDate.of(2024, 12, 31);
-
-        // Create the ticket
-        SeasonTicketVO ticket = new SeasonTicketVO(1, 100.0f, event, startOfSeason, endOfSeason);
-
-        // Assume a date early in the season
-        LocalDate earlySeason = LocalDate.of(2024, 1, 15);
-        if (LocalDate.now().isEqual(earlySeason)) {
-            assertEquals(1.0f, ticket.getCharge(), "Should return full charge early in the season.");
-        }
-
-        // Assume a date mid-season
-        LocalDate midSeason = LocalDate.of(2024, 6, 15);
-        if (LocalDate.now().isEqual(midSeason)) {
-            assertEquals(0.95f, ticket.getCharge(), "Should return discounted charge mid-season.");
-        }
-
-        // Assume a date late in the season
-        LocalDate lateSeason = LocalDate.of(2024, 11, 15);
-        if (LocalDate.now().isEqual(lateSeason)) {
-            assertEquals(0.9f, ticket.getCharge(), "Should return greater discount late in the season.");
-        }
-
-        // Assume a date after the season ends
-        LocalDate afterSeason = LocalDate.of(2025, 1, 15);
-        if (LocalDate.now().isEqual(afterSeason)) {
-            assertEquals(1.0f, ticket.getCharge(), "Should return full charge after the season has ended.");
-        }
-    }*/
-
-
-    @Test
-    void getCharge_variousScenarios() {
+    void test_getCharge_variousScenarios() {
         // Define the season period
         LocalDate startOfSeason = LocalDate.of(2024, 1, 1);
         LocalDate endOfSeason = LocalDate.of(2024, 12, 31);
@@ -353,45 +310,6 @@ class SeasonTicketVOTest {
         }
     }
 
-/*    @Test
-    void getCharge_midSeason_returnsDiscountedCharge() {
-        // This test must be run mid-season to pass
-        LocalDate startOfSeason = LocalDate.of(2024, 4, 1);
-        LocalDate endOfSeason = LocalDate.of(2024, 11, 30);
-        ticket = new SeasonTicketVO(1, 100.0f, event, startOfSeason, endOfSeason);
-
-        LocalDate today = LocalDate.now();
-        int daysOfSeason = Period.between(startOfSeason, endOfSeason).getDays();
-        int daysLeft = Period.between(today, endOfSeason).getDays();
-        float expectedCharge = (daysOfSeason / daysLeft) <= 0.5f ? 1.0f : (daysOfSeason / daysLeft) <= 0.8f ? 0.95f : 0.9f;
-
-        // Ensure today's date is mid-season
-        if (!today.isBefore(startOfSeason.plusDays((int) (daysOfSeason * 0.5))) && today.isBefore(startOfSeason.plusDays((int) (daysOfSeason * 0.8)))) {
-            assertEquals(0.95f, ticket.getCharge(), "Charge should be discounted mid-season.");
-        } else {
-            assertEquals(expectedCharge, ticket.getCharge(), "Charge should be calculated based on the time of the season.");
-        }
-    }*/
-
-/*    @Test
-    void getCharge_lateSeason_returnsGreaterDiscount() {
-        // This test must be run late in the season to pass
-        LocalDate startOfSeason = LocalDate.of(2024, 4, 1);
-        LocalDate endOfSeason = LocalDate.of(2024, 6, 30);
-        ticket = new SeasonTicketVO(1, 100.0f, event, startOfSeason, endOfSeason);
-
-        LocalDate today = LocalDate.now();
-        int daysOfSeason = Period.between(startOfSeason, endOfSeason).getDays();
-        int daysLeft = Period.between(today, endOfSeason).getDays();
-        float expectedCharge = (daysOfSeason / daysLeft) <= 0.5f ? 1.0f : (daysOfSeason / daysLeft) <= 0.8f ? 0.95f : 0.9f;
-
-        // Ensure today's date is late-season
-        if (!today.isBefore(startOfSeason.plusDays((int) (daysOfSeason * 0.8))) && today.isBefore(endOfSeason)) {
-            assertEquals(0.9f, ticket.getCharge(), "Charge should be greater discounted late-season.");
-        } else {
-            assertEquals(expectedCharge, ticket.getCharge(), "Charge should be calculated based on the time of the season.");
-        }
-    }*/
 
     @AfterEach
     public void teardown() {
