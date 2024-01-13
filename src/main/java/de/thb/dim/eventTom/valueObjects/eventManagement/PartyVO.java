@@ -27,34 +27,34 @@ public class PartyVO extends EventVO {
         return result;
     }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!super.equals(obj)) {
-			return false;
-		}
-		if (!(obj instanceof PartyVO)) {
-			return false;
-		}
-		PartyVO other = (PartyVO) obj;
-		if (catering == null) {
-			if (other.catering != null) {
-				return false;
-			}
-		} else if (!catering.equals(other.catering)) {
-			return false;
-		}
-		if (performer == null) {
-			if (other.performer != null) {
-				return false;
-			}
-		} else if (!performer.equals(other.performer)) {
-			return false;
-		}
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof PartyVO)) {
+            return false;
+        }
+        PartyVO other = (PartyVO) obj;
+        if (catering == null) {
+            if (other.catering != null) {
+                return false;
+            }
+        } else if (!catering.equals(other.catering)) {
+            return false;
+        }
+        if (performer == null) {
+            if (other.performer != null) {
+                return false;
+            }
+        } else if (!performer.equals(other.performer)) {
+            return false;
+        }
+        return true;
+    }
 
 
 
@@ -68,7 +68,8 @@ public class PartyVO extends EventVO {
     }
 
     /**
-     *
+     * Osama Ahmad: with this implementation I could not check the invalid values for catering, therefore I tested the invalid cases for catering and performer
+     * in : ==> PartyVOMocking into PartyVOTest.
      * @param catering
      */
     public void setCatering(String catering) {
@@ -76,7 +77,7 @@ public class PartyVO extends EventVO {
     }
 
     /**
-     *
+     * Osama Ahmad: fixed implementation in the PartyVOMocking into PartyVOTest.
      * @param perfomer
      */
     public void setPerformer(String perfomer) {
