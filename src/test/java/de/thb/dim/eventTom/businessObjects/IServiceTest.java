@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -54,7 +55,6 @@ public class IServiceTest {
     private IService mailingService;
 
 
-
     @BeforeEach
     public void setUp() throws CustomerNoDateOfBirthException, CustomerTooYoungException {
         service = new IService_Implementation();
@@ -92,7 +92,6 @@ public class IServiceTest {
     }
 
 
-
     @Test
     public void testPrintingService() throws Exception {
         // Define mock behavior for printing service
@@ -114,11 +113,6 @@ public class IServiceTest {
     }
 
 
-
-
-
-
-
     private class IService_Implementation implements IService {
 
         @Override
@@ -138,15 +132,6 @@ public class IServiceTest {
             return "Service Started";
         }
     }
-
-
-
-
-
-
-
-
-
 
 
     @AfterEach
