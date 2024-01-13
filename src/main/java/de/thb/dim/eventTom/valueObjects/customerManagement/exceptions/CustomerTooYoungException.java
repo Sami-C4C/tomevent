@@ -2,9 +2,7 @@ package de.thb.dim.eventTom.valueObjects.customerManagement.exceptions;
 
 public class CustomerTooYoungException extends Exception {
 
-	/**
-	 *
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	public CustomerTooYoungException () {
