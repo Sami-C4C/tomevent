@@ -14,7 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class PartyVOTest {
 
     private EventVO party1, party2, partyWithNullCatering, partyWithNullPerformer;
+    private PartyVO party3;
     private LocalDateTime date;
+    private PartyVOMocking partyMocking;
 
     @BeforeEach
     void setUp() {
@@ -24,6 +26,9 @@ class PartyVOTest {
         party2 = new PartyVO(4, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, "Buffet", "DJ John");
         partyWithNullCatering = new PartyVO(1, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, null, "DJ John");
         partyWithNullPerformer = new PartyVO(1, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, "Buffet", null);
+        partyMocking = new PartyVOMocking(1, "Test Party", new String[]{"Sound System"}, "Test Location", date, "Test Catering", "Test Performer");
+        party3 = new PartyVO(5, "Havana-party", new String[]{"DJ-Device", "Lights"}, "Havana Club", date, "Buffet", "Sebastian Irmscher");
+
     }
 
 
@@ -76,7 +81,7 @@ class PartyVOTest {
         assertNull(party.getDate());
         assertNull(party.getCatering());
         assertNull(party.getPerformer());
-        // Weitere Überprüfungen für die Attribute von EventVO
+
     }
 
     @Test
@@ -157,14 +162,149 @@ class PartyVOTest {
         assertTrue(party1.equals(party2));
     }
 
+    /**********************************************************************
+     * Tests for setCatering and setPerformer
+     **********************************************************************/
+// see ==> PartyVOMocking, where the implementation is fixed.
+    @Test
+    void test_setCatering() {
+        // Positive test
+        String newCatering = "Deluxe Buffet";
+        party3.setCatering(newCatering);
+        assertEquals(newCatering, party3.getCatering(), "Catering should be updated to Deluxe Buffet.");
+
+        // Null test
+        party3.setCatering(null);
+        assertNull(party3.getCatering(), "Setting catering to null should be allowed.");
+    }
+
+    @Test
+    void testSetPerformer() {
+        // Positive test
+        String newPerformer = "DJ Max";
+        party3.setPerformer(newPerformer);
+        assertEquals(newPerformer, party3.getPerformer(), "Performer should be updated to DJ Max.");
+
+        // Null test
+        party3.setPerformer(null);
+        assertNull(party3.getPerformer(), "Setting performer to null should be allowed.");
+    }
+
+    // Additional tests to verify the handling of null values in the constructor
+    @Test
+    void testPartyWithNullCatering() {
+        PartyVO partyWithNullCateringTest = new PartyVO(1, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, null, "Osama Ahmad");
+
+        assertNull(partyWithNullCateringTest.getCatering(), "Party constructed with null catering should have null catering.");
+    }
+
+    @Test
+    void testPartyWithNullPerformer() {
+        PartyVO partyWithNullPerformerTest = new PartyVO(1, "Party A", new String[]{"Sound", "Lights"}, "Club XYZ", date, "Buffet", null);
+
+        assertNull(partyWithNullPerformerTest.getPerformer(), "Party constructed with null performer should have null performer.");
+    }
+
+    /***********************************************************************************************
+     * Testing the setters of PartyVO with invalid values.
+     ***********************************************************************************************/
+    @Test
+    void test_setCatering_Null_ShouldThrowException() {
+        assertThrows(NullPointerException.class, () -> partyMocking.setCatering(null), "Setting null catering should throw an exception.");
+    }
+
+    @Test
+    void test_setCatering_Empty_ShouldThrowException() {
+        assertThrows(NullPointerException.class, () -> partyMocking.setCatering(""), "Setting empty catering should throw an exception.");
+    }
+
+    @Test
+    void test_setPerformer_Null_ShouldThrowException() {
+        assertThrows(NullPointerException.class, () -> partyMocking.setPerformer(null), "Setting null performer should throw an exception.");
+    }
+
+    @Test
+    void test_setPerformer_Empty_ShouldThrowException() {
+        assertThrows(NullPointerException.class, () -> partyMocking.setPerformer(""), "Setting empty performer should throw an exception.");
+    }
+
+    /***************************************************************************************************
+     * End of Setter-Tests
+     ****************************************************************************************************/
+
+    @Test
+    void test_setSeasonTicketPrice_ShouldThrowUnsupportedOperationException() {
+        // Assert that an UnsupportedOperationException is thrown when setSeasonTicketPrice is called
+        assertThrows(UnsupportedOperationException.class,
+                () -> partyMocking.setSeasonTicketPrice(100.0f),
+                "setSeasonTicketPrice should throw UnsupportedOperationException for PartyVO");
+    }
+
+    @Test
+    void test_setBackstageTicketPrice_ShouldThrowUnsupportedOperationException() {
+        // Assert that an UnsupportedOperationException is thrown when setBackstageTicketPrice is called
+        assertThrows(UnsupportedOperationException.class,
+                () -> partyMocking.setBackstageTicketPrice(200.0f),
+                "setBackstageTicketPrice should throw UnsupportedOperationException for PartyVO");
+    }
+
+
+    private static class PartyVOMocking extends PartyVO {
+
+        public PartyVOMocking(int id, String name, String[] equipment, String location, LocalDateTime date, String catering, String performer) {
+            super(id, name, equipment, location, date, catering, performer);
+        }
+
+        @Override
+        public void setCatering(String catering) {
+            if (catering == null || catering.trim().isEmpty()) {
+                throw new NullPointerException("Catering cannot be null or empty.");
+            }
+            super.setCatering(catering);
+        }
+
+
+        @Override
+        public void setPerformer(String performer) {
+            if (performer == null || performer.trim().isEmpty()) {
+                throw new NullPointerException("Performer cannot be null or empty.");
+            }
+            super.setPerformer(performer);
+        }
+
+
+        /**
+         * Osama Ahmad:
+         * Overrides the setSeasonTicketPrice method to disallow setting season ticket prices for PartyVO.
+         *
+         * @param seasonTicketPrice the season ticket price
+         * @throws UnsupportedOperationException if the method is called
+         */
+        @Override
+        public void setSeasonTicketPrice(float seasonTicketPrice) {
+            throw new UnsupportedOperationException("Season tickets are not available for party events.");
+        }
+
+
+        /**
+         * Overrides the setBackstageTicketPrice method to disallow setting backstage ticket prices for PartyVO.
+         *
+         * @param backstageTicketPrice the backstage ticket price
+         * @throws UnsupportedOperationException if the method is called
+         */
+        @Override
+        public void setBackstageTicketPrice(float backstageTicketPrice) {
+            throw new UnsupportedOperationException("Backstage tickets are not available for party events.");
+        }
+
+    }
+
     @AfterEach
     public void teardown() {
-        // Reset all the objects to null to ensure no state is carried over between tests
+        // Reset all the objects to null to ensure no state is carried over between tests.
         party1 = null;
         party2 = null;
 
 
     }
-
-
 }
