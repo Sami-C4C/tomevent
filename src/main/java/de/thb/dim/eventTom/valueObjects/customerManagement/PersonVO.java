@@ -41,9 +41,14 @@ abstract class PersonVO implements Serializable {
         return houseNr;
     }
 
+
+
+    /************************************************************************************
+     *Test for Setters with invalid values are performed with mocking into PersonVOTest
+     *************************************************************************************/
     public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+        this.lastName = lastName;
+    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
