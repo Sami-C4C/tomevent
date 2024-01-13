@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -37,17 +36,15 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ITicketOrderingTest {
 
-    private ITicketOrdering ticketOrdering, ticketOrderingParametrized;
+    private ITicketOrdering ticketOrdering;
     private OrderVO order;
     private CustomerVO customer;
-    private TicketVO seat_ticket, season_ticket, backstage_ticket;
+    private TicketVO seat_ticket, backstage_ticket;
     private EventVO party, show;
     private final LocalDateTime testStartTime = LocalDateTime.of(2023, 12, 18, 12, 0);
     Duration runtime;
     LocalDateTime showStartTime, showEndTime;
 
-    @Mock
-    private TicketVO mockTicket;
 
     @Mock
     private IService printingService;
@@ -75,7 +72,7 @@ class ITicketOrderingTest {
         customer = new CustomerVO("Ahmad", "Osama", "Berlinerstr", 23, Gender.M, LocalDate.of(1990, 1, 2));
         order = new OrderVO(1, StateOfOrderVO.STARTED, testStartTime, customer);
         seat_ticket = new SeatTicketVO(123, 40.45f, "A20", party);
-        season_ticket = new SeasonTicketVO(100, 100.0f, show, showStartTime.toLocalDate(), showEndTime.toLocalDate());
+//        season_ticket = new SeasonTicketVO(100, 100.0f, show, showStartTime.toLocalDate(), showEndTime.toLocalDate());
         backstage_ticket = new BackstageTicketVO(224, 45.60f, "B23", show, customer);
         ticketOrdering = new TicketOrdering();
 
@@ -84,7 +81,7 @@ class ITicketOrderingTest {
 
 
     @Test
-    void testStartNewOrder() {
+    void testStartNewOrder() throws NoCustomerException {
         OrderVO startedOrder = ticketOrdering.startNewOrder(customer);
         assertNotNull(startedOrder, "The started order should not be null.");
         assertEquals(customer, startedOrder.getCustomer(), "The customer in the order should match the one provided.");
@@ -93,7 +90,7 @@ class ITicketOrderingTest {
 
 
     @Test
-    void testAddTicket() throws NoOrderException {
+    void testAddTicket() throws NoOrderException, NoCustomerException {
         OrderVO currentOrder = ticketOrdering.startNewOrder(customer);
         ticketOrdering.addTicket(seat_ticket);
         assertTrue(currentOrder.getCart().contains(seat_ticket), "The seat ticket should be added to the cart.");
@@ -101,7 +98,7 @@ class ITicketOrderingTest {
 
 
     @Test
-    void testDeleteTicket() throws NoOrderException {
+    void testDeleteTicket() throws NoOrderException, NoCustomerException {
         OrderVO currentOrder = ticketOrdering.startNewOrder(customer);
         ticketOrdering.addTicket(seat_ticket);
         ticketOrdering.deleteTicket(seat_ticket);
@@ -110,7 +107,7 @@ class ITicketOrderingTest {
 
 
     @Test
-    void testCalculateTotalPrice() throws NoOrderException {
+    void testCalculateTotalPrice() throws NoOrderException, NoCustomerException {
         OrderVO currentOrder = ticketOrdering.startNewOrder(customer);
         ticketOrdering.addTicket(seat_ticket);
         ticketOrdering.addTicket(backstage_ticket);
@@ -129,7 +126,7 @@ class ITicketOrderingTest {
 
 
     @Test
-    void testSortCart() throws NoOrderException {
+    void testSortCart() throws NoOrderException, NoCustomerException {
         OrderVO currentOrder = ticketOrdering.startNewOrder(customer);
         ticketOrdering.addTicket(seat_ticket);
         ticketOrdering.addTicket(backstage_ticket);
@@ -140,7 +137,7 @@ class ITicketOrderingTest {
 
 
     @Test
-    void testSortCartByEvent() throws NoOrderException {
+    void testSortCartByEvent() throws NoOrderException, NoCustomerException {
         OrderVO currentOrder = ticketOrdering.startNewOrder(customer);
         ticketOrdering.addTicket(seat_ticket); // Linked to "Party 1"
         ticketOrdering.addTicket(backstage_ticket); // Linked to "Show 1"
@@ -151,7 +148,7 @@ class ITicketOrderingTest {
 
 
     @Test
-    void testSortCartByPrice() throws NoOrderException {
+    void testSortCartByPrice() throws NoOrderException, NoCustomerException {
         OrderVO currentOrder = ticketOrdering.startNewOrder(customer);
         ticketOrdering.addTicket(seat_ticket); // Price of 40.45
         ticketOrdering.addTicket(backstage_ticket); // Price of 45.60
@@ -372,7 +369,6 @@ class ITicketOrderingTest {
         order = null;
         customer = null;
         seat_ticket = null;
-        season_ticket = null;
         backstage_ticket = null;
         party = null;
         show = null;
