@@ -30,9 +30,8 @@ class SeatTicketVOTest {
 //    private CustomerVO customer3;
 
 
-
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
 
         String[] partyEquipment = {"Sound System", "Lights", "Speaker", "Smart-DJ"};
         String[] showEquipment = {"Lights", "Speaker", "Furniture"};
@@ -95,8 +94,6 @@ class SeatTicketVOTest {
 
 
     }
-
-
 
 
     @Test
@@ -172,9 +169,6 @@ class SeatTicketVOTest {
     }
 
 
-
-
-
     @Test
     public void testInstanceofSeatTicketVO() {
         assertTrue(ticket1 instanceof SeatTicketVO, "ticket1 should be an instance of SeatTicketVO");
@@ -201,7 +195,6 @@ class SeatTicketVOTest {
         assertTrue(event1 instanceof EventVO, "event1 is also an instance of EventVO");
         assertNotSame(event3, event2);
     }
-
 
 
     @AfterEach
