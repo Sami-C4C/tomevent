@@ -1,8 +1,6 @@
 package de.thb.dim.eventTom.valueObjects.ticketSale;
 
 import de.thb.dim.eventTom.valueObjects.eventManagement.EventVO;
-import de.thb.dim.eventTom.valueObjects.eventManagement.PartyVO;
-
 
 
 public class SeatTicketVO extends TicketVO {
@@ -16,13 +14,13 @@ public class SeatTicketVO extends TicketVO {
 	 * see testTicketsIds() into TicketVOTest class
 	 */
 	private static int nextId = 1;
-	
+
 	public SeatTicketVO(int number, float price, String seat, EventVO event) {
 		super(number, event.getName() + " Seat " + nextId++, price,  event);
 	}
 
 
-	
+
 
 	@Override
 	public int hashCode() {
@@ -59,11 +57,25 @@ public class SeatTicketVO extends TicketVO {
 	}*/
 
 
-	@Override
+
+	/*@Override
 	public float getCharge() {
 		// TODO Auto-generated method stub
 		return 0;
+	}*/
+
+
+
+	/**
+	 * Fixed by Osama Ahmad
+	 * I get error while testing test_calculatePriceSeatTicket() in OrderVOTest.
+	 * @return
+	 */
+	@Override
+	public float getCharge() {
+		return 1.1f; // A hypothetical charge rate for seat tickets
 	}
+
 
 	@Override
 	public String getSeatOfTicket() {
