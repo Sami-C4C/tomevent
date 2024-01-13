@@ -12,6 +12,27 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Tobi Emma Nankpan, MN: 20216374
  */
 class CustomerTooYoungExceptionTest {
+
+    @Test
+    void testDefaultConstructor() {
+        Exception exception = assertThrows(CustomerTooYoungException.class, () -> {
+            throw new CustomerTooYoungException();
+        });
+        assertEquals("The Customer is not an adult", exception.getMessage(), "Default message should match.");
+    }
+
+    @Test
+    void testConstructorWithCustomMessage() {
+        String customMessage = "Custom age validation failed";
+        Exception exception = assertThrows(CustomerTooYoungException.class, () -> {
+            throw new CustomerTooYoungException(customMessage);
+        });
+        assertEquals(customMessage, exception.getMessage(), "Custom message should match.");
+    }
+
+
+
+
     @Test
     void shouldThrowExceptionForUnderageCustomer() {
         LocalDate tooYoungDob = LocalDate.now().minusYears(16); // A 16-year-old customer
