@@ -1,8 +1,6 @@
 package de.thb.dim.eventTom.valueObjects.eventManagement;
 
 import java.io.Serializable;
-import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +9,7 @@ import de.thb.dim.eventTom.valueObjects.ticketSale.TicketVO;
 
 
 /**
+ * Osama Ahmad:
  * Cloneable is implemented.
  * The error java.lang.InternalError occurs because clone
  * throws a CloneNotSupportedException. This typically happens
@@ -37,8 +36,9 @@ public abstract class EventVO implements Serializable, Cloneable {
 
 
     /**
-     * NullPointerException, IllegalArgumentException are inserted ,
-     * for testing also with invalid values
+     * Osama Ahmad, MN:20233244.
+     * NullPointerException, IllegalArgumentException are inserted,
+     * for testing also invalid values
      * @param id
      * @param name
      * @param equipment
@@ -54,14 +54,11 @@ public abstract class EventVO implements Serializable, Cloneable {
         setEquipment(equipment);
         setLocation(location);
         setDate(date);
-
-        this.ticketCategory = new ArrayList<TicketVO>(anzCategory);
-
-        //this.ticketCategory = new ArrayList<TicketVO>();
-
+        this.ticketCategory = new ArrayList<>(anzCategory);
     }
 
     /**
+     * Osama Ahmad, MN:20233244.
      * EventVO is abstract and could not be instantiated.
      * every created event should have an id with concreted name.
      *  with some tests like testPartyWithNullName, NullPointerException to be thrown
@@ -73,32 +70,41 @@ public abstract class EventVO implements Serializable, Cloneable {
     }
 
 
+    /**
+     * Fixed by Osama Ahmad, MN:20233244
+     * @return
+     * @throws CloneNotSupportedException
+     */
     @Override
-    public EventVO clone() {
-        try {
-            EventVO cloned = (EventVO) super.clone();
+    public Object clone() throws CloneNotSupportedException {
+        EventVO clonedEvent = (EventVO) super.clone();
 
-            // Deep copy mutable fields to ensure unique instances
-            if (this.equipment != null) {
-                cloned.equipment = this.equipment.clone();
+        // Deep clone the ticketCategory ArrayList if it's not null
+        if (this.ticketCategory != null) {
+            clonedEvent.ticketCategory = new ArrayList<>(this.ticketCategory.size());
+            for (TicketVO ticket : this.ticketCategory) {
+                // Assuming TicketVO also implements Cloneable and has a correctly overridden clone method
+                clonedEvent.ticketCategory.add((TicketVO) ticket.clone());
             }
-            if (this.ticketCategory != null) {
-                cloned.ticketCategory = new ArrayList<>();
-                for (TicketVO ticket : this.ticketCategory) {
-                    cloned.ticketCategory.add((TicketVO) ticket.clone());
-                }
-            }
-
-            return cloned;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError("Clone not supported but should be.", e);
         }
+        return clonedEvent;
     }
 
 
+    /**
+     * Fixed by Osama Ahnad, MN: 20233244.
+     * @return
+     * @throws CloneNotSupportedException
+     */
+   /* @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }*/
 
 
- /*   @Override
+
+
+   /* @Override
     public Object clone() {
         EventVO event = null;
         try {
@@ -108,6 +114,9 @@ public abstract class EventVO implements Serializable, Cloneable {
         }
         return event;
     }*/
+
+
+
 
 
 
@@ -123,9 +132,14 @@ public abstract class EventVO implements Serializable, Cloneable {
     }
 
     /**
+     * Osama Ahmad:
+     *  * Converts the equipment array of this event into a single, comma-separated string.
+     *  * This method handles various scenarios including null elements within the equipment array
+     *  * and entirely null or empty arrays. It ensures a clean and readable string output for
+     *  * the equipment list. If the equipment array is null or empty, or if all elements are null,
+     *  * an empty string is returned. Otherwise, a formatted string with all non-null elements
+     *  * joined by commas is provided.
      *
-     * This implementation ensures that the method returns an empty string if the
-     * equipment array is either null or contains no elements.
      * @return
      */
     public String equipmentToString() {
@@ -134,9 +148,15 @@ public abstract class EventVO implements Serializable, Cloneable {
         }
         StringBuilder sb = new StringBuilder();
         for (String currentEquipment : equipment) {
-            sb.append(currentEquipment).append(", ");
+            if (currentEquipment != null) { // Check for null items
+                sb.append(currentEquipment).append(", ");
+            }
         }
-        // remove comma at the end
+        // If the StringBuilder ends up empty (all items were null), return an empty string
+        if (sb.length() == 0) {
+            return "";
+        }
+        // Otherwise, remove the last comma and space
         return sb.substring(0, sb.length() - 2);
     }
 
@@ -192,10 +212,7 @@ public abstract class EventVO implements Serializable, Cloneable {
             }
         } else if (!location.equals(other.location)) {
             return false;
-
         }if (name == null) {
-        }
-        if (name == null) {
             if (other.name != null) {
                 return false;
             }
@@ -205,10 +222,25 @@ public abstract class EventVO implements Serializable, Cloneable {
         return true;
     }
 
-    public void calculateNrAvailableTickets() {
+   /* public void calculateNrAvailableTickets() {
         for (TicketVO t : ticketCategory)
             nrAvailableTickets += t.getNumber();
+    }*/
+
+    /**
+     * Fixed by Osama Ahmad,MN:20233244
+     */
+    public void calculateNrAvailableTickets() {
+        // Reset the number of available tickets before calculation
+        nrAvailableTickets = 0;
+
+        // Sum the number of tickets from each category
+        for(TicketVO t : ticketCategory) {
+
+            nrAvailableTickets += t.getNumber();
+        }
     }
+
 
     public void addTicketCategory(TicketVO t) {
         ticketCategory.add(t);
@@ -230,27 +262,6 @@ public abstract class EventVO implements Serializable, Cloneable {
         return nrAvailableTickets;
     }
 
-    /**
-     * Modified by Osama Ahmad to test also the invalid IDs values, but I got error because of if (name == null) into equals function
-     * therefore I have written mocking-test into EventVO to check also the invalid values for alle setters
-     * because I could while testing assign invalid values for price, id, name ...etc.
-     * @param id
-     */
-
-
-     /**
-     * @param id
-     */
-    /*public void setId(int id) {
-         if (id <= 0){
-            throw new IllegalArgumentException("Invalid id" + id);
-        }
-        this.id = id;
-    }*/
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
 
     public String getName() {
@@ -282,24 +293,24 @@ public abstract class EventVO implements Serializable, Cloneable {
         return backstageTicketPrice;
     }
 
-
     // Osama Ahmad: Mocking-tests are written to check invalid values for Setters
 
     /**
-     * corrected for partyWithNullName()
-     * @param name
+     * Osama Ahmad:
+     * To test also the invalid IDs values, but I got error because of if (name == null) into equals function
+     * therefore I wrote mocking-test into EventVO to check also the invalid values for alle setters
+     * because I could during testing assign invalid values for price, id, name ...etc.
+     * See → testEventVO_SetterWithInvalidValue() into EventVOTest.
+     * @param id
      */
-     /*public void setName(String name) {
-        if(name == null){
-             throw new NullPointerException("Name cannot be null");
-         }
-        this.name = name;
+    public void setId(int id) {
+        this.id = id;
     }
-*/
+
+
     public void setName(String name) {
         this.name = name;
     }
-
 
     public void setEquipment(String[] equipment) {
         this.equipment = equipment;
@@ -313,14 +324,30 @@ public abstract class EventVO implements Serializable, Cloneable {
         this.date = date;
     }
 
+
     public void setSeatTicketPrice(float seatTicketPrice) {
+
         this.seatTicketPrice = seatTicketPrice;
     }
 
+    /**
+     * Osama Ahmad:
+     * It makes possible to set a season ticket price for party events (PartyVO instances). This behavior
+     * is contrary to business logic, as season tickets for party events should not be available.
+     * I wrote the fixed implementation in PartyVOMocking of PartyVOTest.
+     * @param seasonTicketPrice
+     */
     public void setSeasonTicketPrice(float seasonTicketPrice) {
         this.seasonTicketPrice = seasonTicketPrice;
     }
 
+    /**
+     * Osama Ahmad:
+     * It makes possible to set a backstage ticket price for party events (PartyVO instances). This behavior
+     * is contrary to business logic, as backstage tickets for party events should not be available.
+     * I wrote the fixed implementation into PartyVOMocking of PartyVOTest.
+     * @param backstageTicketPrice
+     */
     public void setBackstageTicketPrice(float backstageTicketPrice) {
         this.backstageTicketPrice = backstageTicketPrice;
     }
