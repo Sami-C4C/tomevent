@@ -9,21 +9,20 @@ import de.thb.dim.eventTom.valueObjects.customerManagement.CustomerVO;
 
 public class OrderVO implements Serializable {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
-	private int orderNr;
+	/*private int orderNr;*/
+	private long orderNr; // changed to long by Osama Ahmad
 	private StateOfOrderVO state;
 	private LocalDateTime timestampStartedOrder;
 	private LocalDateTime timestampFinishedOrder;
 	private List<TicketVO> cart;
 	private CustomerVO customer;
-	
+
 	// LinkedList: faster adding and deleting of objects in the list
 	// ArrayList: faster access objects at certain index
-	
-	public OrderVO(int orderNr, StateOfOrderVO state, LocalDateTime timestampStartedOrder, CustomerVO customer) {
+
+	public OrderVO(long orderNr, StateOfOrderVO state, LocalDateTime timestampStartedOrder, CustomerVO customer) {
 		this.orderNr = orderNr;
 		setState(state);
 		setTimestampStartedOrder(timestampStartedOrder);
@@ -31,7 +30,7 @@ public class OrderVO implements Serializable {
 		cart = new LinkedList<>();
 	}
 
-	public int getOrderNr() {
+	public long getOrderNr() {
 		return orderNr;
 	}
 
@@ -74,19 +73,19 @@ public class OrderVO implements Serializable {
 	public void setCustomer(CustomerVO customer) {
 		this.customer = customer;
 	}
-	
+
 	public void addTicket(TicketVO ticket) {
 		cart.add(ticket);
 	}
-	
+
 	public void deleteTicket(int index) {
 		cart.remove(index);
 	}
-	
+
 	public void deleteTicket(TicketVO ticket) {
 		cart.remove(ticket);
 	}
-	
+
 	public float calculatePriceTickets() {
 		float totalPrice = 0.0f;
 		for(TicketVO ticket : cart) {
@@ -94,11 +93,11 @@ public class OrderVO implements Serializable {
 		}
 		return totalPrice;
 	}
-	
+
 	public TicketVO getTicket(int index) {
 		return cart.get(index);
 	}
-	
+
 	public int getNumberOfTickets() {
 		return cart.size();
 	}
@@ -109,7 +108,7 @@ public class OrderVO implements Serializable {
 		int result = 1;
 		result = prime * result + ((cart == null) ? 0 : cart.hashCode());
 		result = prime * result + ((customer == null) ? 0 : customer.hashCode());
-		result = prime * result + orderNr;
+		result = (int) (prime * result + orderNr); // changed by Osama
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		result = prime * result + ((timestampFinishedOrder == null) ? 0 : timestampFinishedOrder.hashCode());
 		result = prime * result + ((timestampStartedOrder == null) ? 0 : timestampStartedOrder.hashCode());
@@ -132,7 +131,7 @@ public class OrderVO implements Serializable {
 		}
 		return true;
 	}
-	
+
 	public String toString() {
 
 		StringBuilder text = new StringBuilder(String.format(
@@ -153,7 +152,7 @@ public class OrderVO implements Serializable {
 		return text.toString();
 
 	}
-	
-	
+
+
 
 }
