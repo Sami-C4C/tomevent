@@ -6,10 +6,12 @@ import de.thb.dim.eventTom.valueObjects.customerManagement.exceptions.CustomerNo
 import de.thb.dim.eventTom.valueObjects.customerManagement.exceptions.CustomerTooYoungException;
 import de.thb.dim.eventTom.valueObjects.eventManagement.EventVO;
 import de.thb.dim.eventTom.valueObjects.eventManagement.PartyVO;
+import de.thb.dim.eventTom.valueObjects.eventManagement.ShowVO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,26 +29,51 @@ class OrderVOTest {
 
     private OrderVO order;
     private CustomerVO customer;
-    private TicketVO ticket;
-    private EventVO event;
+    private TicketVO seatTicket, seasonTicket, backstageTicket;
+    private EventVO partyEvent, showEvent;
+    private LocalDateTime partyDate, showDate, showStartTime, showEndTime;
+    private LocalDate startOfShow, endOfShow;
     private final LocalDateTime testStartTime = LocalDateTime.of(2023, 12, 18, 12, 0);
 
     @BeforeEach
     void setUp() throws CustomerNoDateOfBirthException, CustomerTooYoungException {
+
+        String[] partyEquipment = {"Sound System", "Lights", "Speaker", "Smart-DJ"};
+        String[] showEquipment = {"Lights", "Microphone", "Furniture", "Stage"};
+
+        Duration runtime = Duration.ofHours(4);
+        showDate = LocalDateTime.now().plusDays(14);
+        partyDate = LocalDateTime.of(2023, 12, 31, 22, 00);
+
+
         customer = new CustomerVO("Ahmad", "Osama", "Berlinerstr", 23, Gender.M, LocalDate.of(1990, 1, 2));
-        event = new PartyVO(1, "Party Event", new String[]{"Speaker", "Microphone"}, "Event Hall", testStartTime, "Catering", "DJ");
-        ticket = new SeatTicketVO(10, 99.99f, "A1", event);
+        partyEvent = new PartyVO(1, "Party Event", new String[]{"Speaker", "Microphone"}, "Event Hall", testStartTime, "Catering", "DJ");
+        showEvent = new ShowVO(2, "Show 1", showEquipment, "Theater ABC", showDate, runtime, 1);
+
+        showStartTime = LocalDateTime.of(2024, 3, 13, 18, 00);
+        showEndTime = LocalDateTime.of(2024, 4, 13, 23, 00);
+        // Convert LocalDateTime to LocalDate
+        startOfShow = showStartTime.toLocalDate();
+        endOfShow = showEndTime.toLocalDate();
+
+
+        seatTicket = new SeatTicketVO(10, 99.99f, "A1", partyEvent);
+        seasonTicket = new SeasonTicketVO(60, 55.99f, showEvent, startOfShow, endOfShow);
+        backstageTicket = new BackstageTicketVO(60, 45.99f, "B66", showEvent, customer);
+
         order = new OrderVO(202400001, StateOfOrderVO.STARTED, testStartTime, customer);
 
     }
 
+
     @Test
-    void getOrderNr() {
+    void test_getOrderNr() {
         assertEquals(202400001, order.getOrderNr());
+        // assertEquals(2024000014344, order.getOrderNr());// This number was to large for integer, as long as the number of order per year would be to 100.000
     }
 
     @Test
-    void getState() {
+    void test_getState() {
         assertEquals(StateOfOrderVO.STARTED, order.getState());
     }
 
@@ -66,7 +93,7 @@ class OrderVOTest {
     @Test
     void getCart() {
         assertTrue(order.getCart().isEmpty());
-        order.addTicket(ticket);
+        order.addTicket(seatTicket);
         assertFalse(order.getCart().isEmpty());
     }
 
@@ -98,7 +125,7 @@ class OrderVOTest {
     @Test
     void setCart() {
         LinkedList<TicketVO> newCart = new LinkedList<>();
-        newCart.add(ticket);
+        newCart.add(seatTicket);
         order.setCart(newCart);
         assertEquals(newCart, order.getCart());
     }
@@ -113,53 +140,76 @@ class OrderVOTest {
 
     @Test
     void addTicket() {
-        order.addTicket(ticket);
+        order.addTicket(seatTicket);
         assertEquals(1, order.getCart().size());
-        assertEquals(ticket, order.getCart().get(0));
+        assertEquals(seatTicket, order.getCart().get(0));
     }
 
     @Test
     void deleteTicket_byIndex() {
-        order.addTicket(ticket);
+        order.addTicket(seatTicket);
         order.deleteTicket(0);
         assertTrue(order.getCart().isEmpty());
     }
 
     @Test
     void deleteTicket_byObject() {
-        order.addTicket(ticket);
-        order.deleteTicket(ticket);
+        order.addTicket(seatTicket);
+        order.deleteTicket(seatTicket);
         assertTrue(order.getCart().isEmpty());
     }
 
     @Test
-    void calculatePriceTickets() {
+    void test_calculatePriceSeatTicket() {
         // Verify individual components of the ticket price calculation
-        assertEquals(99.99f, ticket.getBasePrice(), "Base price should be 99.99.");
-        float charge = ticket.getCharge(); // Replace with the expected charge value
-        assertEquals(charge, ticket.getCharge(), "Charge should be correctly set.");
+        assertEquals(99.99f, seatTicket.getBasePrice(), "Base price should be 99.99.");
+        float charge = seatTicket.getCharge(); // Replace with the expected charge value
+        assertEquals(charge, seatTicket.getCharge(), "Charge should be correctly set.");
 
         // Verify ticket price calculation
-        assertEquals(99.99f * charge, ticket.calculatePrice(), "Ticket price calculation should return expected value.");
+        assertEquals(99.99f * charge, seatTicket.calculatePrice(), "Ticket price calculation should return expected value.");
 
         // Add ticket to order and verify total price
-        order.addTicket(ticket);
+        order.addTicket(seatTicket);
         assertEquals(99.99f * charge, order.calculatePriceTickets(), "Total price of tickets in order should match calculated ticket price.");
     }
 
     @Test
+    void test_calculatePriceTickets() {
+        // Verify individual components of the ticket price calculation
+        assertEquals(99.99f, seatTicket.getBasePrice(), "Base price should be 99.99.");
+        assertEquals(45.99f, backstageTicket.getBasePrice(), "Base price should be 45.67.");
+
+        float chargeSeat = seatTicket.getCharge();  // should be 1.1f if set as above
+        float chargeBackstage = backstageTicket.getCharge();  // should be 1.2f as per your implementation
+        float chargeSeason = seasonTicket.getCharge();
+
+        // Verify ticket price calculation
+        assertEquals(99.99f * chargeSeat, seatTicket.calculatePrice(), "Ticket price calculation for seat ticket should return expected value.");
+        assertEquals(45.99f * chargeBackstage, backstageTicket.calculatePrice(), "Ticket price calculation for backstage ticket should return expected value.");
+        assertEquals(55.99f * chargeSeason, seasonTicket.calculatePrice(), "Ticket price calculation for season ticket should return expected value.");
+
+        // Add tickets to order and verify total price
+        order.addTicket(seatTicket);
+        order.addTicket(backstageTicket);
+        order.addTicket(seasonTicket);
+
+        float expectedTotalPriceTickets = (99.99f * chargeSeat) + (45.99f * chargeBackstage) + (55.99f * chargeSeason);
+        assertEquals(expectedTotalPriceTickets, order.calculatePriceTickets(), "Total price of tickets in order should match calculated ticket prices.");
+    }
+
+    @Test
     void tesGetTicket() {
-        order.addTicket(ticket);
-        assertEquals(ticket, order.getTicket(0));
+        order.addTicket(seatTicket);
+        assertEquals(seatTicket, order.getTicket(0));
     }
 
     @Test
     void testGetNumberOfTickets() {
         assertEquals(0, order.getNumberOfTickets());
-        order.addTicket(ticket);
+        order.addTicket(seatTicket);
         assertEquals(1, order.getNumberOfTickets());
     }
-
 
 
     @Test
@@ -203,11 +253,34 @@ class OrderVOTest {
         assertEquals(expectedHashCode, actualHashCode, "Hash codes should match");
 
 
-
     }
 
 
+    @Test
+    void testHashCodeWithNonNullCartContainingElements() {
+        // Arrange
+        OrderVO order = new OrderVO(202400001, StateOfOrderVO.STARTED, LocalDateTime.of(2023, 12, 18, 12, 0), customer);
+        order.setTimestampFinishedOrder(LocalDateTime.of(2023, 12, 19, 12, 0));
+        LinkedList<TicketVO> cartList = new LinkedList<>();
+        cartList.add(mock(TicketVO.class)); // Add a mock ticket to the list to have at least one element
+        order.setCart(cartList);
 
+        // Act
+        int actualHashCode = order.hashCode();
+
+        // Calculate expected hash code manually, mirroring the logic from OrderVO's hashCode method
+        final int prime = 31;
+        int expectedHashCode = 1;
+        expectedHashCode = prime * expectedHashCode + cartList.hashCode(); // Directly using cartList.hashCode() since it's not null and has elements
+        expectedHashCode = prime * expectedHashCode + (customer == null ? 0 : customer.hashCode());
+        expectedHashCode = (int) (prime * expectedHashCode + order.getOrderNr());
+        expectedHashCode = prime * expectedHashCode + (order.getState() == null ? 0 : order.getState().hashCode());
+        expectedHashCode = prime * expectedHashCode + (order.getTimestampFinishedOrder() == null ? 0 : order.getTimestampFinishedOrder().hashCode());
+        expectedHashCode = prime * expectedHashCode + (order.getTimestampStartedOrder() == null ? 0 : order.getTimestampStartedOrder().hashCode());
+
+        // Assert
+        assertEquals(expectedHashCode, actualHashCode, "Hash codes should match with non-null cart containing elements");
+    }
 
 
     @Test
@@ -292,36 +365,36 @@ class OrderVOTest {
 
     @Test
     void testAddTicket_AddsTicketToOrder() {
-        order.addTicket(ticket);
-        assertTrue(order.getCart().contains(ticket));
+        order.addTicket(seatTicket);
+        assertTrue(order.getCart().contains(seatTicket));
     }
 
     @Test
     void testDeleteTicket_RemovesTicketByIndex() {
-        order.addTicket(ticket);
+        order.addTicket(seatTicket);
         order.deleteTicket(0);
-        assertFalse(order.getCart().contains(ticket));
+        assertFalse(order.getCart().contains(seatTicket));
     }
 
     @Test
     void testDeleteTicket_RemovesTicketByReference() {
-        order.addTicket(ticket);
-        order.deleteTicket(ticket);
-        assertFalse(order.getCart().contains(ticket));
+        order.addTicket(seatTicket);
+        order.deleteTicket(seatTicket);
+        assertFalse(order.getCart().contains(seatTicket));
     }
 
     @Test
     void testCalculatePriceTickets_CalculatesTotalPrice() {
-        order.addTicket(ticket);
-        assertEquals(99.99f * ticket.getCharge(), order.calculatePriceTickets());
+        order.addTicket(seatTicket);
+        assertEquals(99.99f * seatTicket.getCharge(), order.calculatePriceTickets());
     }
 
     @Test
     void testCalculatePriceTickets_WithMultipleTickets_CalculatesCorrectTotal() {
-        order.addTicket(ticket);
-        TicketVO anotherTicket = new SeatTicketVO(10, 49.99f, "A2", event);
+        order.addTicket(seatTicket);
+        TicketVO anotherTicket = new SeatTicketVO(10, 49.99f, "A2", partyEvent);
         order.addTicket(anotherTicket);
-        float expectedTotal = (99.99f * ticket.getCharge()) + (49.99f * anotherTicket.getCharge());
+        float expectedTotal = (99.99f * seatTicket.getCharge()) + (49.99f * anotherTicket.getCharge());
         assertEquals(expectedTotal, order.calculatePriceTickets());
     }
 
@@ -387,10 +460,35 @@ class OrderVOTest {
     }
 
 
+    @Test
+    void testHashCodeWithNonNullCart() {
+        // Arrange
+        OrderVO order = new OrderVO(202400001, StateOfOrderVO.STARTED, LocalDateTime.of(2023, 12, 18, 12, 0), customer);
+        order.setTimestampFinishedOrder(LocalDateTime.of(2023, 12, 19, 12, 0));
+        order.setCart(new LinkedList<>()); // set a non-null empty LinkedList
+
+        // Act
+        int actualHashCode = order.hashCode();
+
+        // Calculate expected hash code manually, mirroring the logic from OrderVO's hashCode method
+        final int prime = 31;
+        int expectedHashCode = 1;
+        expectedHashCode = prime * expectedHashCode + ((order.getCart() == null) ? 0 : order.getCart().hashCode());
+        expectedHashCode = prime * expectedHashCode + ((order.getCustomer() == null) ? 0 : order.getCustomer().hashCode());
+        expectedHashCode = (int) (prime * expectedHashCode + order.getOrderNr());
+        expectedHashCode = prime * expectedHashCode + ((order.getState() == null) ? 0 : order.getState().hashCode());
+        expectedHashCode = prime * expectedHashCode + ((order.getTimestampFinishedOrder() == null) ? 0 : order.getTimestampFinishedOrder().hashCode());
+        expectedHashCode = prime * expectedHashCode + ((order.getTimestampStartedOrder() == null) ? 0 : order.getTimestampStartedOrder().hashCode());
+
+        // Assert
+        assertEquals(expectedHashCode, actualHashCode, "Hash codes should match with non-null cart");
+    }
+
+
     @AfterEach
     public void teardown() {
         // Reset all the objects to null to ensure no state is carried over between tests
-        ticket = null;
+        seatTicket = null;
         order = null;
         customer = null;
 
