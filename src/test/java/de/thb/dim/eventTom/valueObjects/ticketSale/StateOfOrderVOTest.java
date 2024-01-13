@@ -16,6 +16,7 @@ class StateOfOrderVOTest {
         assertArrayEquals(new StateOfOrderVO[]{StateOfOrderVO.STARTED, StateOfOrderVO.CONFIRMED, StateOfOrderVO.PRINTED, StateOfOrderVO.MAILED, StateOfOrderVO.FINISHED}, states, "The array should contain all the enum values in the order they are declared.");
     }
 
+
     @Test
     void valueOf_returnsCorrectEnumValue() {
         assertEquals(StateOfOrderVO.STARTED, StateOfOrderVO.valueOf("STARTED"), "valueOf should return the correct enum value for 'STARTED'.");
@@ -24,6 +25,7 @@ class StateOfOrderVOTest {
         assertEquals(StateOfOrderVO.MAILED, StateOfOrderVO.valueOf("MAILED"), "valueOf should return the correct enum value for 'MAILED'.");
         assertEquals(StateOfOrderVO.FINISHED, StateOfOrderVO.valueOf("FINISHED"), "valueOf should return the correct enum value for 'FINISHED'.");
     }
+
 
     @Test
     void valueOf_withInvalidName_throwsException() {
