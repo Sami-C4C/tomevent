@@ -10,7 +10,9 @@ import de.thb.dim.eventTom.valueObjects.ticketSale.TicketVO;
 
 public interface ITicketOrdering {
 
-	public OrderVO startNewOrder(CustomerVO customer);
+	//	public OrderVO startNewOrder(CustomerVO customer);
+	// fixed by Osama Ahmad.
+	public OrderVO startNewOrder(CustomerVO customer) throws NoCustomerException;
 	public void addTicket(TicketVO ticket) throws NoOrderException, IllegalStateException;
 	public void deleteTicket(TicketVO ticket) throws NoOrderException, IllegalStateException;
 	public float calculateTotalPrice() throws NoOrderException;
@@ -18,5 +20,6 @@ public interface ITicketOrdering {
 	public List<TicketVO> sortCart() throws NoOrderException;
 	public List<TicketVO> sortCartByEvent() throws NoOrderException;
 	public List<TicketVO> sortCartByPrice() throws NoOrderException;
+
 
 }
