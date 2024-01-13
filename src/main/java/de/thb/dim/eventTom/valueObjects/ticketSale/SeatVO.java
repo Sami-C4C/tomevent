@@ -14,12 +14,13 @@ public class SeatVO {
     }
 
     /**
+     * Fixed by Osama Ahmad.
      * we have to test also the invalid seating area
      * @param seatingArea
      */
     public void setSeatingArea(int seatingArea) {
         if (seatingArea < 0) {
-            throw new IllegalArgumentException("Invalid settingArea");
+            throw new IllegalArgumentException("Seating Area cannot be negative");
         }
         this.seatingArea = seatingArea;
     }
@@ -29,12 +30,13 @@ public class SeatVO {
     }
 
     /**
+     * Fixed by Osama Ahmad
      * To Test also the invalid seat number
      * @param seatNumber
      */
     public void setSeatNumber(int seatNumber) {
         if (seatNumber < 0) {
-            throw new IllegalArgumentException("Invalid seatNumber");
+            throw new IllegalArgumentException("Seat number must not be negative");
         }
         this.seatNumber = seatNumber;
     }
