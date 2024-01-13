@@ -2,9 +2,7 @@ package de.thb.dim.eventTom.valueObjects.ticketSale;
 
 import de.thb.dim.eventTom.valueObjects.customerManagement.CustomerVO;
 import de.thb.dim.eventTom.valueObjects.eventManagement.EventVO;
-
 import de.thb.dim.eventTom.valueObjects.eventManagement.PartyVO;
-
 
 public class BackstageTicketVO extends TicketVO {
 
@@ -63,24 +61,18 @@ public class BackstageTicketVO extends TicketVO {
 
 
     /**
+     * @return
      * @author Osama Ahmad, MN:20233244
      * setEvent and getEvent are implemented by Osama ahmad.
-     * @return
      */
-    @Override
-    public EventVO getEvent() {
-        return event;
-    }
-
     @Override
     public void setEvent(EventVO event) {
         // Backstage-ticket should not be sold for party-event
-        if (event instanceof PartyVO) {
-            throw new IllegalArgumentException("No Backstage-ticket for Party, only for show available ");
+        if (event instanceof PartyVO || event == null) {
+            throw new IllegalArgumentException("Event shouldn't be null,also Backstage-ticket not available for Party!");
         }
         this.event = event;
     }
-
 
 
     @Override
