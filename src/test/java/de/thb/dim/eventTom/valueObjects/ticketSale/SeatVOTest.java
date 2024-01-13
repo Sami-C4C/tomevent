@@ -39,7 +39,7 @@ class SeatVOTest {
 
     @Test
     public void testSeatingAreaWithNegativeValue() {
-        // Assuming the seating area should not be negative
+        // After fixing the implementation of setSeatingArea into SeatVo, invalid values for seating-area are not accepted.
         assertThrows(IllegalArgumentException.class, () -> {
             seat.setSeatingArea(-1);
         }, "Setting a negative seating area should throw an IllegalArgumentException");
@@ -47,7 +47,7 @@ class SeatVOTest {
 
     @Test
     public void testSeatNumberWithNegativeValue() {
-        // Assuming the seat number should not be negative
+        // After fixing the implementation of setSeatingArea into SeatVo, invalid values for seating-area are not accepted.
         assertThrows(IllegalArgumentException.class, () -> {
             seat.setSeatNumber(-10);
         }, "Setting a negative seat number should throw an IllegalArgumentException");
