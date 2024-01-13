@@ -10,6 +10,22 @@ import de.thb.dim.eventTom.valueObjects.customerManagement.exceptions.CustomerNo
 import de.thb.dim.eventTom.valueObjects.customerManagement.exceptions.CustomerTooYoungException;
 import de.thb.dim.eventTom.valueObjects.ticketSale.OrderVO;
 
+
+/**
+ * Osama Ahmad:
+ * Constructor for CustomerVO.
+ * <p>
+ * Note: This class does not implement the Cloneable interface. This is a deliberate design choice to ensure the security and integrity
+ * of sensitive customer information. Cloning objects that contain sensitive data can lead to inadvertent exposure or mismanagement of
+ * such data. Therefore, to prevent the risks associated with the standard object cloning process in Java, this class refrains from
+ * providing a cloning mechanism.
+ * <p>
+ * If a use case arises where duplicating a CustomerVO object is necessary, consider implementing a secure and controlled cloning mechanism
+ * that adheres to data protection regulations and best practices. This might involve deep copying mutable fields and ensuring all sensitive
+ * information is handled securely throughout the application. Any such implementation should be thoroughly reviewed and tested to prevent
+ * unintentional data leaks or breaches.
+ */
+
 public class CustomerVO extends PersonVO implements Serializable {
 
     /**
@@ -33,7 +49,9 @@ public class CustomerVO extends PersonVO implements Serializable {
 	}*/
 
     /**
-     * fixed by Osama Ahmad
+     * fixed by Tobi Emma, MN:20216374
+     * In Java, NullPointerException is a runtime exception (unchecked exception) that typically doesn't
+     * need to be declared in a method or constructor's throws clause.
      *
      * @param lastName
      * @param firstName
@@ -112,9 +130,9 @@ public class CustomerVO extends PersonVO implements Serializable {
 
 	/*public void setDateOfBirth(LocalDate dateOfBirth) throws NullPointerException, CustomerTooYoungException {
 		Objects.requireNonNull(dateOfBirth, "Date of Birth cannot be null");
-		
+
 		this.dateOfBirth = dateOfBirth;
-		try { 
+		try {
 			if (calculateAge() < 18) {
 				throw new CustomerTooYoungException("customer is under the age of 18");
 			}
@@ -122,8 +140,6 @@ public class CustomerVO extends PersonVO implements Serializable {
 			System.err.println(e.getMessage());
 		}
 	}*/
-
-
 
 
     /**
@@ -166,15 +182,28 @@ public class CustomerVO extends PersonVO implements Serializable {
     @Override
     public int hashCode() {
         final int prime = 31;
+        int result = 1;
+        result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
+        result = prime * result + ((gender == null) ? 0 : gender.hashCode());
+        result = prime * result + ((order == null) ? 0 : order.hashCode());
+        // removed the ID from hash code computation
+        return result;
+    }
+
+
+
+/*    @Override
+    public int hashCode() {
+        final int prime = 31;
         int result = super.hashCode();
         result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
         result = prime * result + ((gender == null) ? 0 : gender.hashCode());
 
-        // removed the ID from hash code computation
-        //result = prime * result + id;
+
+        result = prime * result + id;
         result = prime * result + ((order == null) ? 0 : order.hashCode());
         return result;
-    }
+    }*/
 
     @Override
     public boolean equals(Object obj) {
@@ -200,17 +229,16 @@ public class CustomerVO extends PersonVO implements Serializable {
 
     /**
      * Fixed by Tobi Emma Nankpan
-     * changed to public to test dobToString, see into CustomerVOTest: dobToString_WithNullDateOfBirth_ShouldThrowException
+     * changed to public to test dobToString,see into CustomerVOTest: test_dobToString_WithNullDateOfBirth_ShouldThrowException
      *
      * @return
      * @throws CustomerNoDateOfBirthException
      */
     public String dobToString() throws CustomerNoDateOfBirthException {
-        String s = null;
         if (dateOfBirth == null) {
             throw new CustomerNoDateOfBirthException("Internal error: No date of birth.");
-        } else s = dateOfBirth.format(DateTimeFormatter.ofPattern("dd MM yyyy"));
-        return s;
+        }
+        return dateOfBirth.format(DateTimeFormatter.ofPattern("dd MM yyyy"));
     }
 
 
