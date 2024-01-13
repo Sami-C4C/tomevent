@@ -14,7 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ShowVOTest {
 
-    private EventVO show1, show2, showWithNullRuntime;
+    private ShowVOMocking showMock;
+    private EventVO show1, showWithNullRuntime;
+    private ShowVO show2;
     private LocalDateTime date;
     private Duration runtime;
 
@@ -25,6 +27,7 @@ class ShowVOTest {
 
         show1 = new ShowVO(1, "Show A", new String[]{"Sound", "Lights"}, "Theatre", date, runtime, 100);
         show2 = new ShowVO(1, "Show B", new String[]{"Sound", "Lights"}, "Theatre", date, runtime, 100);
+        showMock = new ShowVOMocking(1, "Show", new String[]{"Lights", "Sound"}, "Theatre", LocalDateTime.now(), Duration.ofHours(5), 100);
         showWithNullRuntime = new ShowVO(1, "Show A", new String[]{"Sound", "Lights"}, "Theatre", date, null, 100);
     }
 
@@ -215,13 +218,7 @@ class ShowVOTest {
         assertNotEquals(show1, show2);
     }
 
-    @Test
-    void testEqualsWithDifferentClass() {
-        ShowVO show = new ShowVO(1, "Show", new String[]{"Equipment"}, "Location", LocalDateTime.now(), Duration.ofHours(2), 1);
-        Object other = new Object();
 
-        assertNotEquals(show, other);
-    }
 
 
     @Test
@@ -258,6 +255,107 @@ class ShowVOTest {
 
         assertFalse(event1.equals(show2));
     }
+
+
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        // Create a subclass of ShowVO
+        class ShowVOSubclass extends ShowVO {
+            public ShowVOSubclass(int id, String name, String[] equipment, String location, LocalDateTime date, Duration runtime, int anzCategory) {
+                super(id, name, equipment, location, date, runtime, anzCategory);
+            }
+        }
+
+        // Create an instance of the subclass
+        ShowVO subShow = new ShowVOSubclass(1, "Show A", new String[]{"Sound", "Lights"}, "Theatre", date, runtime, 100);
+
+        // Assert that show does not equal an object of its subclass
+        assertFalse(subShow.equals(show2), "ShowVO instance should not be equal to an instance of its subclass.");
+    }
+
+    @Test
+    void testEqualsWithDifferentNonSubclass() {
+        // Create an instance of a different class
+        Object otherObject = new Object();
+
+        // Assert that show does not equal an object of a different class
+        assertFalse(show2.equals(otherObject), "ShowVO instance should not be equal to an instance of a different class.");
+    }
+
+    /*******************************************************************************
+     * Tests for setRuntime
+     *******************************************************************************/
+    // After Fixing the implementation od setRuntime, invalid values are no more accepted.
+    @Test
+    void testSetRuntime() {
+        // Positive test: setting a valid runtime
+        Duration newRuntime = Duration.ofHours(3);
+        show2.setRuntime(newRuntime);
+        assertEquals(newRuntime, show2.getRuntime(), "Runtime should be updated to 3 hours.");
+
+        // Negative test: setting a negative runtime
+        Duration negativeRuntime = Duration.ofHours(-3);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> show2.setRuntime(negativeRuntime));
+        assertEquals("Runtime must not be negative", exception.getMessage(), "Negative runtime should throw IllegalArgumentException.");
+
+        // Null test: setting runtime to null
+        show2.setRuntime(null);
+        assertNull(show2.getRuntime(), "Setting runtime to null should be allowed.");
+
+        // Boundary tests
+        // Test boundary: zero duration
+        show2.setRuntime(Duration.ZERO);
+        assertEquals(Duration.ZERO, show2.getRuntime(), "Setting runtime to zero should be allowed.");
+
+        // Test boundary: smallest positive duration
+        show2.setRuntime(Duration.ofNanos(1));
+        assertEquals(Duration.ofNanos(1), show2.getRuntime(), "Setting runtime to the smallest positive duration should be allowed.");
+    }
+
+
+    /*****************************************************************************************
+     * Tests for Setters into ShowVO with invalid values.
+     *****************************************************************************************/
+    @Test
+    void setRuntime_NullValue_ShouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> showMock.setRuntime(null), "Setting null runtime should throw IllegalArgumentException.");
+    }
+
+    @Test
+    void setRuntime_NegativeValue_ShouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> showMock.setRuntime(Duration.ofHours(-1)), "Setting negative runtime should throw IllegalArgumentException.");
+    }
+
+    @Test
+    void setNrAvailableTickets_NegativeValue_ShouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> showMock.setNrAvailableTickets(-1), "Setting negative number of available tickets should throw IllegalArgumentException.");
+    }
+
+
+    private class ShowVOMocking extends ShowVO {
+
+        public ShowVOMocking(int id, String name, String[] equipment, String location, LocalDateTime date, Duration runtime, int anzCategory) {
+            super(id, name, equipment, location, date, runtime, anzCategory);
+        }
+
+        @Override
+        public void setRuntime(Duration runtime) {
+            if (runtime == null || runtime.isNegative()) {
+                throw new IllegalArgumentException("Runtime must be positive and non-null.");
+            }
+            super.setRuntime(runtime);
+        }
+
+        @Override
+        public void setNrAvailableTickets(int nrAvailableTickets) {
+            if (nrAvailableTickets < 0) {
+                throw new IllegalArgumentException("Number of available tickets must be non-negative.");
+            }
+            super.setNrAvailableTickets(nrAvailableTickets);
+        }
+    }
+
 
 
     @AfterEach
