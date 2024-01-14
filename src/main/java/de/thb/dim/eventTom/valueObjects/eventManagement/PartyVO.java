@@ -4,9 +4,6 @@ import java.time.LocalDateTime;
 
 public class PartyVO extends EventVO {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     private String catering;
     private String performer;
