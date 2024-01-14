@@ -40,7 +40,6 @@ class BackstageTicketVOTest {
 
         runtime = Duration.ofHours(7);
 
-        // LocalDateTime fixedDate = LocalDateTime.of(2024, 2, 15, 19, 0);
         customer1 = new CustomerVO("Schneider", "Tom", "Brunnenstr", 55, Gender.M, LocalDate.of(1994, 10, 22));
         customer2 = new CustomerVO("Ahmad", "Osama", "Berlinerstr", 23, Gender.M, LocalDate.of(1990, 1, 2));
 
