@@ -39,14 +39,12 @@ class OrderingProcessTest {
         ticketOrdering = new TicketOrdering();
         customer = mock(CustomerVO.class);
         ticket = mock(TicketVO.class);
-        // You may need to set up additional properties on the mocks if required by your logic
     }
 
     @Test
     void startNewOrder_ShouldCreateOrder() throws NoCustomerException {
         OrderVO newOrder = ticketOrdering.startNewOrder(customer);
         assertNotNull(newOrder, "New order should be created and not null");
-        // Additional assertions based on your business logic
     }
 
     @Test
@@ -55,7 +53,6 @@ class OrderingProcessTest {
         ticketOrdering.addTicket(ticket);
         // Check if the ticket is added to the order
         assertTrue(newOrder.getCart().contains(ticket), "Ticket should be added to the order");
-        // Additional assertions based on your business logic
     }
 
     @Test
@@ -65,7 +62,6 @@ class OrderingProcessTest {
         ticketOrdering.deleteTicket(ticket);
         // Check if the ticket is removed from the order
         assertFalse(newOrder.getCart().contains(ticket), "Ticket should be removed from the order");
-        // Additional assertions based on your business logic
     }
 
     @Test
@@ -73,8 +69,7 @@ class OrderingProcessTest {
         OrderVO newOrder = ticketOrdering.startNewOrder(customer);
         ticketOrdering.addTicket(ticket);
         ticketOrdering.confirmOrder();
-        // Check if the order is confirmed
-        // This part depends on how you track confirmation in your logic
+
     }
 
     @Test
@@ -82,7 +77,6 @@ class OrderingProcessTest {
         OrderVO newOrder = ticketOrdering.startNewOrder(customer);
         ticketOrdering.addTicket(ticket);
         float totalPrice = ticketOrdering.calculateTotalPrice();
-        // Assert the total price based on the ticket prices
     }
 
     @Test
