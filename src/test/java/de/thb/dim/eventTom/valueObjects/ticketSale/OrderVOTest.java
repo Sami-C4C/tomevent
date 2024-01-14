@@ -256,6 +256,8 @@ class OrderVOTest {
     }
 
 
+
+
     @Test
     void testHashCodeWithNonNullCartContainingElements() {
         // Arrange
@@ -281,6 +283,41 @@ class OrderVOTest {
         // Assert
         assertEquals(expectedHashCode, actualHashCode, "Hash codes should match with non-null cart containing elements");
     }
+
+    @Test
+    void testHashCodeWithNullCart() {
+        OrderVO orderWithNullCart = new OrderVO(202400001, StateOfOrderVO.STARTED, testStartTime, customer);
+        orderWithNullCart.setCart(null);
+        assertNotNull(orderWithNullCart.hashCode(), "Hash code should be calculated even when cart is null.");
+    }
+
+    @Test
+    void testHashCodeWithNullCustomer() {
+        OrderVO orderWithNullCustomer = new OrderVO(202400001, StateOfOrderVO.STARTED, testStartTime, null);
+        assertNotNull(orderWithNullCustomer.hashCode(), "Hash code should be calculated even when customer is null.");
+    }
+
+    @Test
+    void testHashCodeWithNullState() {
+        OrderVO orderWithNullState = new OrderVO(202400001, null, testStartTime, customer);
+        assertNotNull(orderWithNullState.hashCode(), "Hash code should be calculated even when state is null.");
+    }
+
+    @Test
+    void testHashCodeWithNullTimestampStartedOrder() {
+        OrderVO orderWithNullTimestamp = new OrderVO(202400001, StateOfOrderVO.STARTED, null, customer);
+        assertNotNull(orderWithNullTimestamp.hashCode(), "Hash code should be calculated even when timestampStartedOrder is null.");
+    }
+
+    @Test
+    void testHashCodeWithNonNullFields() {
+        LinkedList<TicketVO> cartList = new LinkedList<>();
+        cartList.add(seatTicket);
+        OrderVO orderWithNonNullFields = new OrderVO(202400001, StateOfOrderVO.STARTED, testStartTime, customer);
+        orderWithNonNullFields.setCart(cartList);
+        assertNotNull(orderWithNonNullFields.hashCode(), "Hash code should be calculated with all non-null fields.");
+    }
+
 
 
     @Test
