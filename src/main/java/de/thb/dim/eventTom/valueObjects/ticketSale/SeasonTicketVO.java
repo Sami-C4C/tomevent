@@ -9,9 +9,7 @@ import de.thb.dim.eventTom.valueObjects.eventManagement.PartyVO;
 
 public class SeasonTicketVO extends TicketVO {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1L;
     private static int nextId = 1;
     private LocalDate startOfSeason;
@@ -92,28 +90,7 @@ public class SeasonTicketVO extends TicketVO {
         this.endOfSeason = endOfSeason;
     }
 
-    /**
-     * @return
-     * @author Osama Ahmad
-     * Error: this function has a logical issue
-     * because they use the actual current date with LocalDate.now(), which
-     * cannot be controlled during testing. As a result, it's unclear whether
-     * the conditions for early, mid, and late season charges will be
-     * met when the tests are run. You cannot guarantee that LocalDate.now() will
-     * fall into the necessary range for the test's logic to execute as intended.
-     */
-/*	@Override
-	public float getCharge() {
-		LocalDate today = LocalDate.now();
-		int daysOfSeason = Period.between(getStartOfSeason(), getEndOfSeason()).getDays();
-		int daysLeft = Period.between(today, getEndOfSeason()).getDays();
-		if ((daysOfSeason / daysLeft) <= 0.5f) {
-			return 1;
-		} else if ((daysOfSeason / daysLeft) <= 0.8f) {
-			return 0.95f;
-		}
-		else return 0.9f;
-	}*/
+
     @Override
     public String getSeatOfTicket() {
         StringBuilder sb = new StringBuilder();
@@ -122,6 +99,24 @@ public class SeasonTicketVO extends TicketVO {
     }
 
 
+
+
+    /*
+     *
+     * Error: The old getCharge() function has a logical issue
+     * because they use the actual current date with LocalDate.now(), which
+     * cannot be controlled during testing. As a result, it's unclear whether
+     * the conditions for early, mid, and late season charges will be
+     * met when the tests are run. You cannot guarantee that LocalDate.now() will
+     * fall into the necessary range for the test's logic to execute as intended.
+     */
+
+    /**
+     * @author Osama Ahmad,MN:20233244
+     *
+     * @param currentDate
+     * @return
+     */
     public float getCharge(LocalDate currentDate) {
         if (currentDate.isBefore(getStartOfSeason())) {
             // Before the season starts

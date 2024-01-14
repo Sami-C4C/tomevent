@@ -64,9 +64,6 @@ public class ShowVO extends EventVO {
         this.runtime = runtime;
     }
 
-    /*	public void setRuntime(Duration runtime) {
-            this.runtime = runtime;
-        }*/
 
 
     public void setNrAvailableTickets(int nrAvailableTickets) {

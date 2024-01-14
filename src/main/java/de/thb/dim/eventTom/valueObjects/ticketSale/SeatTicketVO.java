@@ -46,23 +46,8 @@ public class SeatTicketVO extends TicketVO {
 	 *  SeatTickets are available for both event-types party and show.
 	 * @return
 	 */
-/*	@Override
-	public EventVO getEvent() {
-		return event;
-	}
-
-	@Override
-	public void setEvent(EventVO event) {
-		this.event = event;
-	}*/
 
 
-
-	/*@Override
-	public float getCharge() {
-		// TODO Auto-generated method stub
-		return 0;
-	}*/
 
 
 

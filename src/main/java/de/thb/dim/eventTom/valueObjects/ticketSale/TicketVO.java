@@ -61,32 +61,18 @@ public abstract class TicketVO implements Serializable, Comparable<TicketVO>, Cl
 
 
 
-	/**
-	 * CloneNotSupportedException is never thrown and this function.
+	/*
+	 * In the old version of clone(), CloneNotSupportedException is never thrown and this function.
 	 * because this class already implements the Cloneable interface
 	 * doesn't handle the deep cloning of mutable objects. If the
 	 * EventVO or seats are mutable, this could lead to shared references between cloned instances.
-	 * @return
+	 *
 	 */
-	/*@Override
-	public Object clone() {
-		TicketVO ticket = null;
-		try {
-			ticket = (TicketVO) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new InternalError();
-		}
-		return ticket;
-	}*/
+
 
 
 	/**
 	 * Fixed by Osama Ahmad, MN:20233244
-	 * @return
-	 */
-
-	/**
-	 * @author Osama Ahmad
 	 * @return
 	 * @throws CloneNotSupportedException
 	 */
