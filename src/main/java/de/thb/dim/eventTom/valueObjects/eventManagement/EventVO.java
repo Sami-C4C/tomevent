@@ -62,7 +62,7 @@ public abstract class EventVO implements Serializable, Cloneable {
      * EventVO is abstract and could not be instantiated.
      * every created event should have an id with concreted name.
      *  with some tests like testPartyWithNullName, NullPointerException to be thrown
-     *  Also with testPartyWithoutId, IllegalArgumentException to be thrown
+     *  Also with testPartyWithoutId, IllegalArgumentException to be thrown.
      *
      */
     public EventVO() {
@@ -91,29 +91,7 @@ public abstract class EventVO implements Serializable, Cloneable {
     }
 
 
-    /**
-     * Fixed by Osama Ahnad, MN: 20233244.
-     * @return
-     * @throws CloneNotSupportedException
-     */
-   /* @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }*/
 
-
-
-
-   /* @Override
-    public Object clone() {
-        EventVO event = null;
-        try {
-            event = (EventVO) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new InternalError();
-        }
-        return event;
-    }*/
 
 
 
@@ -161,18 +139,7 @@ public abstract class EventVO implements Serializable, Cloneable {
     }
 
 
-   /* public String equipmentToString() {
-        StringBuffer sb = new StringBuffer();
 
-        if (getEquipment() != null) {
-            for (String currentEquipment : getEquipment()) {
-                sb.append(currentEquipment + ", ");
-            }
-            // remove comma at the end
-            sb = new StringBuffer(sb.substring(0, sb.length() - 2));
-        }
-        return sb.toString();
-    }*/
 
 
     @Override
@@ -222,10 +189,7 @@ public abstract class EventVO implements Serializable, Cloneable {
         return true;
     }
 
-   /* public void calculateNrAvailableTickets() {
-        for (TicketVO t : ticketCategory)
-            nrAvailableTickets += t.getNumber();
-    }*/
+
 
     /**
      * Fixed by Osama Ahmad,MN:20233244
