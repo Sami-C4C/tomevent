@@ -11,7 +11,6 @@ public class OrderVO implements Serializable {
 
 
 	private static final long serialVersionUID = 1L;
-	/*private int orderNr;*/
 	private long orderNr; // changed to long by Osama Ahmad
 	private StateOfOrderVO state;
 	private LocalDateTime timestampStartedOrder;
@@ -108,7 +107,7 @@ public class OrderVO implements Serializable {
 		int result = 1;
 		result = prime * result + ((cart == null) ? 0 : cart.hashCode());
 		result = prime * result + ((customer == null) ? 0 : customer.hashCode());
-		result = (int) (prime * result + orderNr); // changed by Osama
+		result = (int) (prime * result + orderNr); // changed by Osama Ahmad
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		result = prime * result + ((timestampFinishedOrder == null) ? 0 : timestampFinishedOrder.hashCode());
 		result = prime * result + ((timestampStartedOrder == null) ? 0 : timestampStartedOrder.hashCode());
