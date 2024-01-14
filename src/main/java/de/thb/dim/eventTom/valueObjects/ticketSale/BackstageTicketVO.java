@@ -6,9 +6,7 @@ import de.thb.dim.eventTom.valueObjects.eventManagement.PartyVO;
 
 public class BackstageTicketVO extends TicketVO {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1L;
     private static int nextId = 1;
     private CustomerVO customer;
@@ -63,7 +61,7 @@ public class BackstageTicketVO extends TicketVO {
     /**
      * @return
      * @author Osama Ahmad, MN:20233244
-     * setEvent and getEvent are implemented by Osama ahmad.
+     * setEvent is implemented by Osama ahmad, because Backstage-ticket should not be sold for party-event.
      */
     @Override
     public void setEvent(EventVO event) {
