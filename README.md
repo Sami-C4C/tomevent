@@ -8,7 +8,7 @@ As part of the Software Quality project in the winter semester of 2023/2024, the
 Test-Coverage-rate: <br>
 eventManagment: 94% <br>
 customerManagment: 87% <br>
-TicketSale: 85%
+TicketSale: 88%
 </p><br>
 
 
