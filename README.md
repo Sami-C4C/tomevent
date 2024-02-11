@@ -12,4 +12,4 @@ TicketSale: 88%
 </p><br>
 
 
-![Screenshot from 2024-01-13 10-01-27.png](..%2F..%2FPictures%2FScreenshots%2FScreenshot%20from%202024-01-13%2010-01-27.png)
+![Screenshot from 2024-02-11 11-09-45](https://github.com/Sami-C4C/tomevent/assets/101250244/6490587f-8085-4fc5-9fea-7ba51193918d)
